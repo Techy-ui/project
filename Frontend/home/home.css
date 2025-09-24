@@ -1,0 +1,175 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    background-image:url('/back.png');
+    background-size:cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.header {
+    display: flex;
+    flex-direction: column; 
+    padding-left: 20px;
+    background-color: rgba(255, 255, 255, 0.211); 
+}
+
+.header .title-row {
+    display: flex;
+    align-items: center;
+    gap: 2%; /* Space between logo and title text */
+}
+
+.header .title-row img {
+    width: 12%; /* Adjust as needed */
+    height: auto;
+}
+
+.header .title-row h1 {
+    font-size: 5rem;
+    margin: 0;
+    font-family: "Merienda", cursive;
+    font-weight: 400;
+    font-style: normal;
+    color:#69443c;
+}
+
+.header .title-row h1 sub {
+    font-size: 1.5rem;
+    color: white;
+    font-family: "Edu NSW ACT Hand Pre", cursive;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    color: black;
+    font-size: 1.7rem;
+    padding:5%;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: "Dekko", cursive;
+    gap:10%;
+}
+
+.buttons{
+    padding-top:50px;
+    display: flex;
+    flex-direction: column;
+    width:100vh;
+    gap: 20px;
+}
+ .content button{
+    width: 100%;
+    height: 50px;
+    background-color: #69443c;
+    color: black;
+    border: none;
+    border-radius: 25px/50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-family:'Times New Roman', Times, serif;
+    align-self: flex-end;
+    text-transform: uppercase;
+    background-color: rgba(255, 255, 255, 0.427); 
+    opacity: 0.8;
+
+    
+ }
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40vh; /* Full viewport height */
+    width:100%;
+    overflow: hidden; /* Hide any overflow */
+    padding: 10px;
+    gap:10px;
+    opacity: 0.5;
+}
+
+@media (min-width:1024px){
+    .collage img:nth-child(1)  { 
+    width: 200px;
+    transform: translate(-23%);
+ }
+.collage img:nth-child(2)  { 
+    transform: translate(-23%);
+    width: 410px;  
+    height: 225px;
+}
+
+.collage img:nth-child(5){
+    width: 150px;
+    height:auto;
+}
+
+}
+@media (max-width: 768px) {
+
+    .header .title-row{
+        flex-direction:row;
+        gap:5px;
+    }
+    .header .title-row img {
+        width: 40px;
+    }
+
+    .header .title-row h1 {
+        font-size: 2rem;
+    }
+
+    .header .title-row h1 sub {
+        font-size: 0.8rem;
+    }
+
+    .content {
+        font-size: 1.2rem;
+        padding: 15px;
+    }
+
+    .content button {
+        width: 80%;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header .title-row h1 {
+        font-size: 1.5rem;
+    }
+
+    .header .title-row h1 sub {
+        font-size: 0.5rem;
+    }
+    .header .title-row img {
+        width: 30px;
+        height:auto;
+    }
+    .content {
+        font-size: 0.8rem;
+        padding: 10px;
+    }
+
+    .content button {
+        width: 90%;
+        height: 40px;
+        font-size: 0.5rem;
+    }
+    .collage {
+    grid-auto-flow: column;                      /* Makes it fill columns first (top to bottom) */
+    grid-auto-columns: 40px;                    /* Width of each column */
+    grid-template-rows: repeat(auto-fit, 120px); /* Number of rows adjusts to fit container height */
+    gap: 5px;
+    opacity: 0.5;
+    height:60vh;
+    }
+}
