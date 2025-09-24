@@ -1,4 +1,4 @@
 
 setTimeout(function() {
-        window.location.href = "/Frontend/home/home.html"; 
+        window.location.href = "https://techy-ui.github.io/project/Frontend/home/home.html"; 
     }, 7000); 
