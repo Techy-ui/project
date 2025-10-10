@@ -18,7 +18,7 @@ public class ProfileController {
     }
 }
 
-// Simple Profile model
+
 class Profile {
     private String name;
     private int age;
