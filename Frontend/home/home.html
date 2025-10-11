@@ -4,37 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeCare - A healthy UI</title>
-    <link rel="icon" type="image/x-icon" href="/Project-pig/home/logo.png">
+    <link rel="icon" type="image/x-icon" href="home/logo.png">
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Hand+Pre:wght@400..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/project/Frontend/home/home.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dekko&display=swap" rel="stylesheet">
+
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="home.css">
 </head>
 <body>
+    <!-- Header -->
     <div class="header">
-    <div class="title-row">
-        <img src="/project/Frontend/home/logo.png" alt="UnityHearts Logo">
-        <h1>CodeCare<sub>Your health, Just a scan away</sub></h1>
+        <div class="title-row">
+            <img src="home/logo.png" alt="CodeCare Logo">
+            <h1>CodeCare<sub>Your health, Just a scan away</sub></h1>
+        </div>
     </div>
-</div>
-<div class="content">
-    <p> "Meet the card that speaks when you can’t."<br>
-    "This isn’t just technology — it’s a lifeline in your pocket."<br>
-    "CodeCare makes your health details instantly accessible, protecting you when it matters most."</p>
-    <div class ="buttons">
-        <button onclick="window.location.href='/Frontend/registration/register.html'">Click here to Build your profile</button>
-        <button onclick="loginProfile()" >Click here if already registerd</button>
+
+    <!-- Main Content -->
+    <div class="content">
+        <p>
+            "Meet the card that speaks when you can’t."<br>
+            "This isn’t just technology — it’s a lifeline in your pocket."<br>
+            "CodeCare makes your health details instantly accessible, protecting you when it matters most."
+        </p>
+        <div class="buttons">
+            <button onclick="window.location.href='../registration/register.html'">Click here to Build your profile</button>
+            <button onclick="loginProfile()">Click here if already registered</button>
+        </div>
     </div>
-</div>
-<div class="image-container">
-    <img src="/project/Frontend/home/0.png" alt="1">
-    <img src="/project/Frontend/home/0.png" alt="1">
-</div>
+
+    <!-- Images -->
+    <div class="image-container">
+        <img src="home/0.png" alt="1">
+        <img src="home/0.png" alt="1">
+    </div>
 </body>
 </html>
