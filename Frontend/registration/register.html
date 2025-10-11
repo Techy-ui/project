@@ -5,119 +5,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <link rel="icon" type="image/x-icon" href="../home/logo.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Hand+Pre:wght@400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="register.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dekko&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&family=Edu+NSW+ACT+Hand+Pre:wght@400..700&family=Dekko&display=swap" rel="stylesheet">
 </head>
 <body>
-    
-
     <header class="header">
-    <div class="title-row">
-      <img src="../home/logo.png" alt="CodeCare Logo">
-      <h1>CodeCare<sub>Your Health, Just a Scan Away</sub></h1>
-    </div>
-    <nav class="nav-links">
-      <a href="../home/home.html">Home</a>
-    </nav>
-  </header>
+        <div class="title-row">
+            <img src="../home/logo.png" alt="CodeCare Logo">
+            <h1>CodeCare<sub>Your Health, Just a Scan Away</sub></h1>
+        </div>
+        <nav class="nav-links">
+            <a href="../home/home.html">Home</a>
+        </nav>
+    </header>
     
     <div class="container">
-      <div class="form">
-        <h1>Registration form</h1>
-      </div>
-      <div class="card">
-        <div class="row">
-      <!-- Left column (existing fields) -->
-          <div class="left">
-            <div class="Name">
-              <h3 style="display: inline-block; margin-right: 60px;">Name:</h3>
-              <input type="text" placeholder="Enter your name">
-            </div>
-            <div class="Age">
-              <h3 style="display: inline-block; margin-right: 75px;">Age:</h3>
-              <input type="text" placeholder="Enter your age">
-            </div>
-            <div class="Address">
-              <h3 style="display: inline-block; margin-right: 42px;">Address:</h3>
-              <textarea type="text" placeholder="Enter your address"></textarea>
-            </div>
-            <div class="Phone">
-              <h3 style="display: inline-block; margin-right: 34px;">Phone no:</h3>
-              <input type="text" placeholder="Enter your Phone number">
-            </div>
-            <div class="Blood">
-              <h3 style="display: inline-block; margin-right: 5px;">Blood Group:</h3>
-              <input type="text" placeholder="Enter your Blood Group">
-            </div>
-          </div>
-          <div class="right">
-            <div class="Medical">
-              <h3 style="display: inline-block; margin-right: 42px;">Medical Details:</h3>
-              <textarea type="text" placeholder="Enter your address"></textarea>
-            </div>
-            <div class="Emergency">
-              <h3 style="display: inline-block; margin-right: 13px;">Emergency Contact:</h3>
-              <input type="text" placeholder="Enter your Emergency contact no">
-            </div>
-            <div class="Age">
-              <h3 style="display: inline-block; margin-right: 110px;">E-Mail:</h3>
-              <input type="text" placeholder="Enter your E-Mail">
-            </div>
-            <div class="Age">
-              <h3 style="display: inline-block; margin-right: 90px;">Password:</h3>
-              <input type="text" placeholder="Enter your Password">
-            </div>
-          </div>
-          <div class ="buttons">
-            <button onclick="window.location.href='../login/login.html'">Submit</button>
-          </div>
+        <div class="form">
+            <h1>Registration Form</h1>
         </div>
-      </div>
-      
-    
+        <!-- Wrap your card inside a <form> so submit works -->
+        <form id="registerForm" class="card">
+            <div class="row">
+                <div class="left">
+                    <div class="Name">
+                        <h3 style="display: inline-block; margin-right: 60px;">Name:</h3>
+                        <input type="text" placeholder="Enter your name" required>
+                    </div>
+                    <div class="Age">
+                        <h3 style="display: inline-block; margin-right: 75px;">Age:</h3>
+                        <input type="number" placeholder="Enter your age" required>
+                    </div>
+                    <div class="Address">
+                        <h3 style="display: inline-block; margin-right: 42px;">Address:</h3>
+                        <textarea placeholder="Enter your address" required></textarea>
+                    </div>
+                    <div class="Phone">
+                        <h3 style="display: inline-block; margin-right: 34px;">Phone no:</h3>
+                        <input type="tel" placeholder="Enter your Phone number" required>
+                    </div>
+                    <div class="Blood">
+                        <h3 style="display: inline-block; margin-right: 5px;">Blood Group:</h3>
+                        <input type="text" placeholder="Enter your Blood Group" required>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="Medical">
+                        <h3 style="display: inline-block; margin-right: 42px;">Medical Details:</h3>
+                        <textarea placeholder="Any allergies or conditions"></textarea>
+                    </div>
+                    <div class="Emergency">
+                        <h3 style="display: inline-block; margin-right: 13px;">Emergency Contact:</h3>
+                        <input type="tel" placeholder="Enter your Emergency contact no" required>
+                    </div>
+                    <div class="Email">
+                        <h3 style="display: inline-block; margin-right: 110px;">E-Mail:</h3>
+                        <input type="email" placeholder="Enter your E-Mail" required>
+                    </div>
+                    <div class="Password">
+                        <h3 style="display: inline-block; margin-right: 90px;">Password:</h3>
+                        <input type="password" placeholder="Enter your Password" required>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registerForm');
 
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
 
-  <script>
-      document.addEventListener('DOMContentLoaded', function() {
-      const form = document.querySelector('form');  // Or give it an ID
-      form.addEventListener('submit', function(e) {
-          e.preventDefault();
-          const formData = {
-              name: document.querySelector('.Name input').value,
-              age: parseInt(document.querySelector('.Age input').value),
-              address: document.querySelector('.Address textarea').value,
-              phone: document.querySelector('.Phone input').value,
-              bloodGroup: document.querySelector('.Blood input').value,
-              medicalDetails: document.querySelector('.Medical textarea').value,
-              emergencyContact: document.querySelector('.Emergency input').value,
-              email: document.querySelector('[placeholder="Enter your E-Mail"]').value,  // Adjust selector
-              password: document.querySelector('[placeholder="Enter your Password"]').value
-          };
-          fetch('http://localhost:8080/api/register', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(formData)
-          })
-          .then(response => response.text())
-          .then(data => {
-              alert(data);
-              if (data.includes('successfully')) {
-                  window.location.href = '../Individual/dashboard.html';
-              }
-          })
-          .catch(err => alert('Error: ' + err));
-      });
-  });
-  
-  </script>
+                const formData = {
+                    name: document.querySelector('.Name input').value,
+                    age: parseInt(document.querySelector('.Age input').value),
+                    address: document.querySelector('.Address textarea').value,
+                    phone: document.querySelector('.Phone input').value,
+                    bloodGroup: document.querySelector('.Blood input').value,
+                    medicalDetails: document.querySelector('.Medical textarea').value,
+                    emergencyContact: document.querySelector('.Emergency input').value,
+                    email: document.querySelector('.Email input').value,
+                    password: document.querySelector('.Password input').value
+                };
 
+                // 🔑 Replace localhost with your Railway URL
+                fetch('https://project-production-2aa6.up.railway.app/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data);
+                    if (data.includes('successfully')) {
+                        window.location.href = '../Individual/dashboard.html';
+                    }
+                })
+                .catch(err => alert('Error: ' + err));
+            });
+        });
+    </script>
 </body>
+</html>
