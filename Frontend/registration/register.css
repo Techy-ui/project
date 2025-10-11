@@ -13,213 +13,237 @@ body {
 }
 
 .header {
-    display: flex;
-    flex-direction: column; 
-    padding-left: 20px;
-    background-color: rgba(255, 255, 255, 0.211); 
-}
-
-.header .title-row {
-    display: flex;
-    align-items: center;
-
-}
-
-.header .title-row img {
-    width: 5%; /* Adjust as needed */
-    height: auto;
-}
-
-.header .title-row h1 {
-    font-size: 1.5rem;
-    margin: 0;
-    font-family: "Merienda", cursive;
-    font-weight: 400;
-    font-style: normal;
-    color:#69443c;
-}
-
-.header .title-row h1 sub {
-    font-size: 0.5rem;
-    color: white;
-    font-family: "Edu NSW ACT Hand Pre", cursive;
-}
-
-.header .title-row h5 {
-    font-size: 0.5srem;
-    color: black;
-    font-family:Georgia, 'Times New Roman', Times, serif;
-    margin-left: 70%;
-}
-a{
-    text-decoration:none;
-    color:blueviolet;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size:0.8rem;
-}
-.container {
-      display: flex;
-      flex-direction:column;
-      justify-content: center;
-      align-items:center ;
-      height: 70vh;
-      padding: 10px;
-      box-sizing: border-box;
-      background-color: rgba(255, 255, 255, 0.211); 
-      margin-top:5%;
-      margin-left:8%;
-      margin-right:8%;
-      margin-bottom:5%;
-      border-radius: 30px;
-}
-
-.form{
-    font-family: "Merienda", cursive;
-}
-
-.Name,.Age {
+  background-color: rgba(255, 255, 255, 0.3);
   display: flex;
-  gap: 10px; 
-  margin: 10px 0;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
 }
 
-.Name input,.Age input {
-    height:20px;
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.title-row img {
+  width: 60px;
+  height: auto;
+}
+
+.title-row h1 {
+  font-family: "Merienda", cursive;
+  color: #69443c;
+  font-size: 1.8rem;
+}
+
+.title-row sub {
+  display: block;
+  font-size: 0.7rem;
+  color: #fff;
+  font-family: "Edu NSW ACT Hand Pre", cursive;
+  margin-top: 2px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #4b2a25;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-left: 15px;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #b15b40;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;  /* Align from top */
+    align-items: center;
+    min-height: 65vh;             /* Ensure it grows if content increases */
+    padding: 30px 10px 10px 10px; /* Add more top padding */
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.211); 
+    margin: 5% 8%;
+    border-radius: 30px;
+}
+
+
+.form {
+    font-family: "Merienda", cursive;
+}
+.form h1 {
+    font-size: 2rem;
+    text-align: center;
+    margin: 0 0 20px 0;      /* Add bottom margin, no top margin */
+    line-height: 1.2;
+}
+
+.card {
+    width: 100%;
+    max-width: 1000px;      /* Prevent it from going too wide */
+    padding: 5px;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    margin-top: 20px;
+}
+
+/* Row for left and right columns */
+.card .row {
+    display: flex;
+    gap: 20px;       /* Space between left and right */
+    flex-wrap: wrap;  /* Wrap columns on smaller screens */
+}
+
+/* Left and right columns */
+.left, .right {
+    flex: 1;                
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Individual field styling */
+.Name, .Age, .Address, .Phone, .Blood {
+    display: flex;
+    gap: 10px; 
+    align-items: center;
+    margin: 10px 0;
+}
+
+.Medical{
+    display: flex;
+    gap: 10px; 
+    align-items: center;
+    margin: 10px 0;
+}
+
+.Medical h3 {
+    white-space: nowrap;     
+    margin-right: 15px;    /* Space between label and input */
+}
+
+.Emergency h3{
+    white-space: nowrap;      
+    margin-right: 15px;
+}
+.Name input, .Age input, .Phone input, .Blood input,.Emergency input {
+    height: 25px;
     font-size: 12px;
     border-radius: 5px;
     border: 1px solid gray;
     background-color: rgba(255, 255, 255, 0.211); 
-    font-family: "Edu NSW ACT Hand Pre", cursive ;
-    width:40vh;
+    font-family: "Edu NSW ACT Hand Pre", cursive;
+    width: 40vh;
 }
 
+/* Address textarea styling */
+.Address textarea,.Medical textarea {
+    width: 40vh;
+    height: 10vh;
+    font-size: 12px;
+    border-radius: 5px;
+    border: 1px solid #808080;
+    background-color: rgba(255, 255, 255, 0.211);
+    font-family: "Edu NSW ACT Hand Pre", cursive;
 
-.card {
-    border-radius: 30px;
+    padding: 5px;             
+    box-sizing: border-box;
+    resize: vertical;         
+    overflow-y: auto;         
+    overflow-x: hidden;       
+    white-space: pre-wrap;    
+    word-wrap: break-word;    
+    line-height: 1.2; 
+
+    /* Scrollbar styling */
+    scrollbar-width: thin;  /* Firefox */
+    scrollbar-color: rgba(255,255,255,0.4) transparent; /* Thumb & track */
+}
+
+/* Webkit Browsers: Chrome, Edge, Safari */
+.Address textarea::-webkit-scrollbar {
+    width: 6px;              
+    background: transparent;  
+}
+
+.Address textarea::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.4); 
+    border-radius: 3px;
+}
+
+/* Remove scrollbar arrows */
+.Medical textarea::-webkit-scrollbar-button {
+    display: none;
+}
+
+.Medical textarea::-webkit-scrollbar {
+    width: 6px;              
+    background: transparent;  
+}
+
+.Medical textarea::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.4); 
+    border-radius: 3px;
+}
+
+/* Remove scrollbar arrows */
+.Address textarea::-webkit-scrollbar-button {
+    display: none;
+}
+
+.buttons {
     display: flex;
-    flex-direction:column;
-    padding: 30px;
-    height:50vh;
-    width: 1000px;
-    margin-top: 20px;
-}
-.left {
-    flex: 8;
-    display: flex;
-    position: relative;
-}
-.icon img{
-    position: absolute;
-    width: 200px;
-    height:auto;
-    border-radius: 50%;
-    justify-content: center;
-    align-items: center;
-    
+    justify-content: center;   /* Center horizontally */
+    align-items: center;       /* Center vertically if needed */
+    gap: 20px;
+    margin-top: auto;          /* Push to bottom of card */
+    width: 100%;               /* Full width of parent container */
+    padding-bottom: 5px;      /* Optional: spacing from bottom */
 }
 
-.icon[for="a"] {
-    position: absolute;
-    bottom: 0; /* Stick it to the bottom */
-    top:50%;
-    left:90%;/* Move it to the center */
-    width:20%;
-    height:30%;
+.buttons button {
+    width: 150px;              /* Fixed width for all buttons */
+    height: 40px;              /* Adjust height as needed */
+    background-color: rgba(255, 255, 255, 0.427);
+    color: black;
     border: none;
-    border-radius: 70%;
-}
-
-.icon[for="b"] {
-    position: absolute;
-    top:15%;
-    right:90px; /* Move it to the center */
-    width:20%;
-    height:30%;
-    border: none;
-    border-radius: 70%;
-}
-    
-
-
-.right {
-    flex: 2;
-    padding-left: 30px;
-}
-
-
-.name {
-    position: absolute;     /* Default */
-    font-size: 0.8rem;
-    color:black;
-    top:0%;
-    width:1024px;
-    gap:10%;
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-family: 'Times New Roman', Times, serif;
     text-transform: uppercase;
-    overflow : hidden;
-    
-}
-.info {
-    font-size: 16px;
-    line-height: 1.7;
-}
-.notification {
-  color: white;
-  text-decoration: none;
-  position: relative;
-  display: inline-block;
+    opacity: 0.8;
+    transition: transform 0.2s ease, background 0.3s ease;
 }
 
-.notification .badge {
-  position: absolute;
-  top: -20px;
-  right: -20px;
-  padding: 5px 10px;
-  border-radius: 50%;
-  background:none;
-  color:red;;
-  font-size: 1.2rem;
-}
-.popup-message {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color:#5d38ba94;
+.buttons button:hover {
+    background-color: #69443c;
     color: white;
-    padding: 10px 20px;
-    border-radius: 10px;
-    opacity: 0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    pointer-events: none;
-    transition: opacity 0.5s ease;
-    z-index: 9999;
-    font-family: "Merienda", cursive;
-}
-.popup-messages {
-    background-color: #5d38ba94;
-    color: white;
-    padding: 20px 30px;
-    border-radius: 15px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    font-family: "Merienda", cursive;
-    font-size: 1.2rem;
-    text-align: center;
-    max-width: 100%;
-    opacity: 0;
-  animation: fadeIn 0.5s ease forwards;
+    transform: translateY(-2px);
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
+/* Responsive tweaks */
+@media (max-width: 1024px) {
+    .card {
+        width: 90%;
     }
-    to {
-        opacity: 1;
+
+    .card .row {
+        flex-direction: column; /* Stack columns on smaller screens */
+        gap: 20px;
+    }
+
+    .left input, .right input, .Address textarea {
+        width: 100%;
     }
 }
-.popup-message.show {
-    opacity: 1;
-}
+
 /* Blur everything until interaction */
 body.blurred .container,
 body.blurred .header,

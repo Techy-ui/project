@@ -17,51 +17,99 @@
     <link href="https://fonts.googleapis.com/css2?family=Dekko&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="overlay" style="display: flex;">
-      <div id="overlayContent">
-        <button id="viewBtn">👁 View Profile</button>
-      </div>
-    </div>
+    
 
-    <div class="header">
+    <header class="header">
     <div class="title-row">
-        <img src="https://techy-ui.github.io/project/Frontend/home/logo.png" alt="UnityHearts Logo">
-        <h1>CodeCare<sub>Your Health, Just a scan away</sub></h1>
-        <h5>
-          <a href="https://techy-ui.github.io/Project-pig/notification/notification.html" class="notification" id="notificationLink" rel="noopener noreferrer">
-            <span>Notifications</span>
-            <span class="badge">1</span>
-          </a>
-        </h5>
+      <img src="https://techy-ui.github.io/project/Frontend/home/logo.png" alt="CodeCare Logo">
+      <h1>CodeCare<sub>Your Health, Just a Scan Away</sub></h1>
     </div>
-    </div>
-    <a href="https://techy-ui.github.io/Project-pig//home/home.html">Home &gt &gt</a>
-    <a href="https://techy-ui.github.io/Project-pig//profile/profile.html">Registration</a>
+    <nav class="nav-links">
+      <a href="/Frontend/home/home.html">Home</a>
+    </nav>
+  </header>
     
     <div class="container">
       <div class="form">
         <h1>Registration form</h1>
       </div>
       <div class="card">
-        <div class="Name">
-          <h3 style="display: inline-block; margin-right: 10px;">Name:</h3>
-          <input type="text" placeholder="Enter your name">
+        <div class="row">
+      <!-- Left column (existing fields) -->
+          <div class="left">
+            <div class="Name">
+              <h3 style="display: inline-block; margin-right: 60px;">Name:</h3>
+              <input type="text" placeholder="Enter your name">
+            </div>
+            <div class="Age">
+              <h3 style="display: inline-block; margin-right: 75px;">Age:</h3>
+              <input type="text" placeholder="Enter your age">
+            </div>
+            <div class="Address">
+              <h3 style="display: inline-block; margin-right: 42px;">Address:</h3>
+              <textarea type="text" placeholder="Enter your address"></textarea>
+            </div>
+            <div class="Phone">
+              <h3 style="display: inline-block; margin-right: 34px;">Phone no:</h3>
+              <input type="text" placeholder="Enter your Phone number">
+            </div>
+            <div class="Blood">
+              <h3 style="display: inline-block; margin-right: 5px;">Blood Group:</h3>
+              <input type="text" placeholder="Enter your Blood Group">
+            </div>
+          </div>
+          <div class="right">
+            <div class="Medical">
+              <h3 style="display: inline-block; margin-right: 42px;">Medical Details:</h3>
+              <textarea type="text" placeholder="Enter your address"></textarea>
+            </div>
+            <div class="Emergency">
+              <h3 style="display: inline-block; margin-right: 13px;">Emergency Contact:</h3>
+              <input type="text" placeholder="Enter your Emergency contact no">
+            </div>
+            <div class="Age">
+              <h3 style="display: inline-block; margin-right: 110px;">E-Mail:</h3>
+              <input type="text" placeholder="Enter your E-Mail">
+            </div>
+            <div class="Age">
+              <h3 style="display: inline-block; margin-right: 90px;">Password:</h3>
+              <input type="text" placeholder="Enter your Password">
+            </div>
+          </div>
+          <div class ="buttons">
+            <button onclick="window.location.href='/Frontend/login/login.html'">Submit</button>
+          </div>
         </div>
-        <div class="Age">
-          <h3 style="display: inline-block; margin-right: 10px;">Age:</h3>
-          <input type="text" placeholder="Enter your name">
-        </div>
-
       </div>
       
-      
-   </div>
-   <audio id="notifSound" src="https://techy-ui.github.io/Project-pig/profile/bell.wav" preload="auto"></audio>
-   <div class="popup-message" id="popupMessage">
-        You Have an Unread notification!
-    </div>
     
 
 
-<script src="https://techy-ui.github.io/Project-pig/profile/profile.js"></script>
+
+  <script>
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+
+        // Get form data
+        const formData = {
+            name: this.name.value,
+            age: this.age.value,
+            address: this.address.value,
+            phone: this.phone.value,
+            bloodGroup: this.bloodGroup.value,
+            medicalDetails: this.medicalDetails.value
+        };
+
+        // Call backend API
+        fetch('http://localhost:8080/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.text())
+        .then(data => alert(data))
+        .catch(err => console.error('Error:', err));
+    });
+  </script>
+
 </body>

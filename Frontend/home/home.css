@@ -83,7 +83,11 @@ body {
 
     
  }
-
+.content button:hover {
+    background-color: #69443c;
+    color: white;
+    transform: translateY(-2px);
+}
 .image-container {
     display: flex;
     justify-content: center;

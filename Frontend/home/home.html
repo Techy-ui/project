@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Hand+Pre:wght@400..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://techy-ui.github.io/project/Frontend/home/home.css">
+    <link rel="stylesheet" href="/Frontend/home/home.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dekko&display=swap" rel="stylesheet">
@@ -28,7 +28,7 @@
     "This isn’t just technology — it’s a lifeline in your pocket."<br>
     "CodeCare makes your health details instantly accessible, protecting you when it matters most."</p>
     <div class ="buttons">
-        <button onclick="registerProfile()">Click here to Build your profile</button>
+        <button onclick="window.location.href='/Frontend/registration/register.html'">Click here to Build your profile</button>
         <button onclick="loginProfile()" >Click here if already registerd</button>
     </div>
 </div>
@@ -36,28 +36,5 @@
     <img src="https://techy-ui.github.io/project/Frontend/home/0.png" alt="1">
     <img src="https://techy-ui.github.io/project/Frontend/home/0.png" alt="1">
 </div>
-<script>
-    function registerProfile() {
-      fetch("http://localhost:8080/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: "Akash", age: 21 })
-      })
-      .then(res => res.text())
-      .then(data => alert(data))
-      .catch(err => console.error(err));
-    }
-
-    function loginProfile() {
-      fetch("http://localhost:8080/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: "Akash" })
-      })
-      .then(res => res.text())
-      .then(data => alert(data))
-      .catch(err => console.error(err));
-    }
-  </script>
 </body>
 </html>

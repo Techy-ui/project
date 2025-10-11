@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Individual Dashboard - CodeCare</title>
+  <link rel="icon" type="image/x-icon" href="https://techy-ui.github.io/Project-pig/home/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dekko&family=Merienda:wght@700&family=Edu+NSW+ACT+Hand:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/Frontend/Individual/dashboard.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="title-row">
+      <img src="https://techy-ui.github.io/project/Frontend/home/logo.png" alt="CodeCare Logo">
+      <h1>CodeCare<sub>Your Health, Just a Scan Away</sub></h1>
+    </div>
+    <nav class="nav-links">
+      <a href="/Frontend/home/home.html">Home</a>
+    </nav>
+  </header>
+
+  <!-- Main Dashboard -->
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <button class="menu-toggle">☰</button>
+      <ul>
+        <li id="btnProfile">My Profile</li>
+        <li id="btnEdit">Edit Profile</li>
+        <li id="btnCard">Card Generation</li>
+        <li id="btnLogout">Logout</li>
+      </ul>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content" id="contentArea">
+      <p style="color:#5a3a32; font-size:1.1rem;">Select an option from the left menu to view details.</p>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Get buttons and content area
+    const content = document.getElementById('contentArea');
+    const profileBtn = document.getElementById('btnProfile');
+    const editBtn = document.getElementById('btnEdit');
+    const cardBtn = document.getElementById('btnCard');
+    const logoutBtn = document.getElementById('btnLogout');
+
+    // Default message
+    content.innerHTML = `<p style="color:#5a3a32; font-size:1.1rem;">Select an option from the left menu to view details.</p>`;
+
+    // My Profile section
+    profileBtn.addEventListener('click', () => {
+      content.innerHTML = `
+        <h2>Welcome, Username</h2>
+        <p class="tagline">Your health, Just a scan away</p>
+        <div class="profile-card">
+          <div class="profile-image">
+            <img src="https://cdn-icons-png.flaticon.com/512/848/848043.png" alt="Profile Picture">
+          </div>
+          <div class="profile-info">
+            <h3>User Name</h3>
+            <p><strong>Age:</strong> 25</p>
+            <p><strong>Blood Group:</strong> O+</p>
+            <p><strong>Phone no:</strong> +91 9876543210</p>
+            <p><strong>E-mail:</strong> username@email.com</p>
+            <p><strong>Emergency Contact:</strong> +91 9123456789</p>
+          </div>
+        </div>
+      `;
+    });
+
+    // Edit Profile section
+    editBtn.addEventListener('click', () => {
+      content.innerHTML = `
+        <h2>Edit Profile</h2>
+        <p>Coming soon — here you’ll be able to edit your personal details.</p>
+        
+      `;
+    });
+
+    // Card Generation section
+    // Card Generation section
+cardBtn.addEventListener('click', () => {
+  content.innerHTML = `
+    <div class="card-generation-header">
+      <h2>Card Generation</h2>
+      <button class="download-btn">⬇ Download</button>
+    </div>
+
+    <p>Generate your CodeCare card with your details and QR code.</p>
+
+    <div class="card-generation">
+      <!-- Front Card -->
+      <div class="card front-card">
+        <div class="user-info">
+          <img src="https://cdn-icons-png.flaticon.com/512/848/848043.png" alt="Profile" class="profile-img">
+          <div class="details">
+            <p><strong>Name:</strong> User Name</p>
+            <p><strong>Age:</strong> 25</p>
+            <p><strong>Blood Group:</strong> O+</p>
+            <p><strong>Phone:</strong> +91 9876543210</p>
+            <p><strong>Email:</strong> username@email.com</p>
+            <p><strong>Emergency Contact:</strong> +91 9123456789</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Back Card -->
+      <div class="card back-card">
+        <div class="back-content">
+          <div class="address">
+            <p><strong>Address:</strong></p>
+            <p>123, MG Road, Kochi</p>
+          </div>
+          <div class="qr">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=CodeCare-User123" alt="QR Code">
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+});
+
+
+    // Logout
+    logoutBtn.addEventListener('click', () => {
+      window.location.href = "/Frontend/login/login.html";
+    });
+  </script>
+
+</body>
+</html>
