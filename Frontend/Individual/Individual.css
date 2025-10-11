@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: 'Dekko', cursive;
-  background: url("/back.png")
+  background: url("https://techy-ui.github.io/Project-pig/back.png")
     no-repeat center center fixed;
   background-size: cover;
   color: #4d2b1f;

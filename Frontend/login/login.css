@@ -8,7 +8,7 @@
 body {
   height: 100vh;
   font-family: "Dekko", cursive;
-  background: url('/back.png') center/cover no-repeat;
+  background: url('https://techy-ui.github.io/Project-pig/back.png') center/cover no-repeat;
   color: #222;
   display: flex;
   flex-direction: column;
