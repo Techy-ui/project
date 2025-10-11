@@ -87,29 +87,37 @@
 
 
   <script>
-    document.getElementById('registrationForm').addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevent default form submission
-
-        // Get form data
-        const formData = {
-            name: this.name.value,
-            age: this.age.value,
-            address: this.address.value,
-            phone: this.phone.value,
-            bloodGroup: this.bloodGroup.value,
-            medicalDetails: this.medicalDetails.value
-        };
-
-        // Call backend API
-        fetch('http://localhost:8080/api/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        })
-        .then(response => response.text())
-        .then(data => alert(data))
-        .catch(err => console.error('Error:', err));
-    });
+      document.addEventListener('DOMContentLoaded', function() {
+      const form = document.querySelector('form');  // Or give it an ID
+      form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const formData = {
+              name: document.querySelector('.Name input').value,
+              age: parseInt(document.querySelector('.Age input').value),
+              address: document.querySelector('.Address textarea').value,
+              phone: document.querySelector('.Phone input').value,
+              bloodGroup: document.querySelector('.Blood input').value,
+              medicalDetails: document.querySelector('.Medical textarea').value,
+              emergencyContact: document.querySelector('.Emergency input').value,
+              email: document.querySelector('[placeholder="Enter your E-Mail"]').value,  // Adjust selector
+              password: document.querySelector('[placeholder="Enter your Password"]').value
+          };
+          fetch('http://localhost:8080/api/register', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(formData)
+          })
+          .then(response => response.text())
+          .then(data => {
+              alert(data);
+              if (data.includes('successfully')) {
+                  window.location.href = '../Individual/dashboard.html';
+              }
+          })
+          .catch(err => alert('Error: ' + err));
+      });
+  });
+  
   </script>
 
 </body>

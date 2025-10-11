@@ -20,6 +20,7 @@
     </div>
     <nav class="nav-links">
       <a href="../home/home.html">Home</a>
+      <a href="../login/login.html">Login</a>
     </nav>
   </header>
 
@@ -36,17 +37,54 @@
       <h2>INDIVIDUAL LOGIN</h2>
       <p class="sub">Enter Your credentials</p>
 
-      <form>
+      <form id="loginForm">
         <label for="email">E-mail:</label>
         <input type="email" id="email" placeholder="Enter your email" required>
 
         <label for="password">Password:</label>
         <input type="password" id="password" placeholder="Enter your password" required>
 
-        <button type="submit" onclick="window.location.href='dashboard.html'">LOGIN</button>
+        <button type="submit">LOGIN</button>
       </form>
     </div>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('loginForm');
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // Basic validation
+        if (!email.includes('@')) {
+          alert('Please enter a valid email.');
+          return;
+        }
+
+        const formData = {
+          email: email,
+          password: password
+        };
+
+        fetch('http://localhost:8080/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        })
+        .then(response => response.text())
+        .then(data => {
+          alert(data);
+          if (data.includes('successfully')) {
+            window.location.href = 'dashboard.html';  // Redirect after successful login
+          }
+        })
+        .catch(err => alert('Error: ' + err));
+      });
+    });
+  </script>
 
 </body>
 </html>

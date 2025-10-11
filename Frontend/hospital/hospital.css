@@ -1,0 +1,132 @@
+body {
+  margin: 0;
+  font-family: 'Dekko', cursive;
+  background: url("https://techy-ui.github.io/Project-pig/back.png")
+    no-repeat center center fixed;
+  background-size: cover;
+  color: #4d2b1f;
+}
+
+/* Header */
+.header {
+  background-color: rgba(255, 255, 255, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.title-row img {
+  width: 60px;
+  height: auto;
+}
+
+.title-row h1 {
+  font-family: "Merienda", cursive;
+  color: #69443c;
+  font-size: 1.8rem;
+}
+
+.title-row sub {
+  display: block;
+  font-size: 0.7rem;
+  color: #fff;
+  font-family: "Edu NSW ACT Hand Pre", cursive;
+  margin-top: 2px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #4b2a25;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-left: 15px;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #b15b40;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  margin-left: 15px;
+  margin-top: 5px;
+  font-size: 0.95rem;
+}
+
+.breadcrumb a {
+  text-decoration: none;
+  color: #3a1c1a;
+}
+
+.breadcrumb span {
+  color: #7a5a52;
+}
+
+/* Login Container */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
+  padding: 40px;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.login-card h2 {
+  font-family: 'Dekko', cursive;
+  letter-spacing: 1px;
+}
+
+.sub {
+  color: #6a6a6a;
+  font-size: 0.9rem;
+  margin-top: -10px;
+  margin-bottom: 25px;
+}
+
+label {
+  display: block;
+  text-align: left;
+  font-size: 1rem;
+  margin: 10px 0 5px 10px;
+}
+
+input {
+  width: 90%;
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  outline: none;
+}
+
+button {
+  background-color: #f7a3b5;
+  color: #3b1d18;
+  font-weight: bold;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 25px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #f47a9b;
+}
