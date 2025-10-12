@@ -11,13 +11,12 @@ public class CodeCareApplication {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(CodeCareApplication.class);
 
-        // Fix DATABASE_URL missing 'jdbc:' prefix
         app.addListeners((ApplicationListener<ApplicationEnvironmentPreparedEvent>) event -> {
             ConfigurableEnvironment env = event.getEnvironment();
             String dbUrl = env.getProperty("DATABASE_URL");
-            if (dbUrl != null && dbUrl.startsWith("postgresql://")) {
+            if (dbUrl != null && !dbUrl.startsWith("jdbc:")) {
                 System.setProperty("spring.datasource.url", "jdbc:" + dbUrl);
-                System.out.println("✅ Fixed JDBC URL: jdbc:" + dbUrl);
+                System.out.println("✅ Converted DATABASE_URL to JDBC URL: jdbc:" + dbUrl);
             }
         });
 
