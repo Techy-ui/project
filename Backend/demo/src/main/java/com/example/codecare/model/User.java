@@ -1,17 +1,51 @@
 package com.example.codecare.model;
 
+import jakarta.persistence.*;
+
+/**
+ * User entity representing a user in the system.
+ */
+@Entity
+@Table(name = "users")
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 100)
     private String name;
+
     private int age;
+
+    @Column(length = 255)
     private String address;
+
+    @Column(length = 20)
     private String phone;
+
+    @Column(length = 5)
     private String bloodGroup;
+
+    @Column(length = 500)
     private String medicalDetails;
+
+    @Column(length = 20)
     private String emergencyContact;
+
+    @Column(unique = true, nullable = false, length = 100)
     private String email;
+
+    @Column(nullable = false)
     private String password;
 
-    // Getters & Setters
+    // Default constructor
+    public User() {}
+
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 

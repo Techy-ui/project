@@ -1,13 +1,13 @@
 package com.example.codecare.controller;
 
 import com.example.codecare.model.User;
+import com.example.codecare.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -16,10 +16,11 @@ public class RegisterController {
 
     private static final Logger logger = LoggerFactory.getLogger(RegisterController.class);
 
-    private final List<User> users = new ArrayList<>();
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public List<User> getUsers() {
-        return users;
+    public RegisterController(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/register")
@@ -28,24 +29,19 @@ public class RegisterController {
 
         if (user.getEmail() == null || user.getEmail().isEmpty()) {
             logger.warn("Invalid email in register request");
-            return ResponseEntity.badRequest()
-                    .body("{\"error\":\"Email is required\"}");
+            return ResponseEntity.badRequest().body("{\"error\":\"Email is required\"}");
         }
 
-        if (users.stream().anyMatch(u -> u.getEmail().equals(user.getEmail()))) {
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             logger.warn("Duplicate email attempt: {}", user.getEmail());
-            return ResponseEntity.badRequest()
-                    .body("{\"error\":\"Email already registered\"}");
+            return ResponseEntity.badRequest().body("{\"error\":\"Email already registered\"}");
         }
 
-        users.add(user);
+        // Hash the password before saving
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+
         logger.info("User registered successfully: {}", user.getEmail());
         return ResponseEntity.ok("{\"message\":\"User registered successfully\"}");
-    }
-
-    @GetMapping("/profiles")
-    public List<User> getAllUsers() {
-        logger.info("Fetching all profiles");
-        return users;
     }
 }
