@@ -6,9 +6,10 @@ WORKDIR /app
 COPY pom.xml .
 RUN mvn dependency:go-offline
 
-# Copy source and build
+COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
+
 
 # Run the app
 FROM eclipse-temurin:17-jdk
