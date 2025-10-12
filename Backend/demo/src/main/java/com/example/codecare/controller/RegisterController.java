@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")  // Enable CORS
+@CrossOrigin(origins = "https://techy-ui.github.io/project/")  // Enable CORS
 public class RegisterController {
 
     private List<User> users = new ArrayList<>();  // Temporary in-memory storage
