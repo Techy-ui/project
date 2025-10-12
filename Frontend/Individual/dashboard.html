@@ -20,7 +20,6 @@
     </div>
     <nav class="nav-links">
       <a href="../home/home.html">Home</a>
-      <a href="../login/login.html">Login</a> 
     </nav>
   </header>
 
@@ -30,9 +29,8 @@
     <div class="sidebar">
       <button class="menu-toggle">☰</button>
       <ul>
-        <li id="btnProfile">My Profile</li>
-        <li id="btnEdit">Edit Profile</li>
-        <li id="btnCard">Card Generation</li>
+        <li id="btnProfile">Patient Profile</li>
+        <li id="btnMed">Medical details</li>
         <li id="btnLogout">Logout</li>
       </ul>
     </div>
@@ -43,95 +41,48 @@
     </div>
   </div>
 
-  <!-- JavaScript -->
   <script>
-    // Get buttons and content area
-    const content = document.getElementById('contentArea');
-    const profileBtn = document.getElementById('btnProfile');
-    const editBtn = document.getElementById('btnEdit');
-    const cardBtn = document.getElementById('btnCard');
-    const logoutBtn = document.getElementById('btnLogout');
+    document.addEventListener('DOMContentLoaded', () => {
+      const content = document.getElementById('contentArea');
+      const profileBtn = document.getElementById('btnProfile');
+      const medBtn = document.getElementById('btnMed');
+      const logoutBtn = document.getElementById('btnLogout');
 
-    // Default message
-    content.innerHTML = `<p style="color:#5a3a32; font-size:1.1rem;">Select an option from the left menu to view details.</p>`;
+      const user = JSON.parse(localStorage.getItem('user'));
+      if(!user) {
+        alert('Please login first.');
+        window.location.href = '../Individual/Individual.html';
+      }
 
-    // My Profile section
-    profileBtn.addEventListener('click', () => {
-      content.innerHTML = `
-        <h2>Welcome, Username</h2>
-        <p class="tagline">Your health, Just a scan away</p>
-        <div class="profile-card">
-          <div class="profile-image">
-            <img src="https://cdn-icons-png.flaticon.com/512/848/848043.png" alt="Profile Picture">
+      profileBtn.addEventListener('click', () => {
+        content.innerHTML = `
+          <div class="profile-card">
+            <div class="profile-info">
+              <h3>${user.name}</h3>
+              <p><strong>Age:</strong> ${user.age}</p>
+              <p><strong>Blood Group:</strong> ${user.bloodGroup}</p>
+              <p><strong>Phone no:</strong> ${user.phone}</p>
+              <p><strong>Email:</strong> ${user.email}</p>
+              <p><strong>Emergency Contact:</strong> ${user.emergencyContact}</p>
+              <p><strong>Address:</strong> ${user.address}</p>
+            </div>
           </div>
-          <div class="profile-info">
-            <h3>User Name</h3>
-            <p><strong>Age:</strong> 25</p>
-            <p><strong>Blood Group:</strong> O+</p>
-            <p><strong>Phone no:</strong> +91 9876543210</p>
-            <p><strong>E-mail:</strong> username@email.com</p>
-            <p><strong>Emergency Contact:</strong> +91 9123456789</p>
+        `;
+      });
+
+      medBtn.addEventListener('click', () => {
+        content.innerHTML = `
+          <div class="profile-card">
+            <h3>Medical Details</h3>
+            <p>${user.medicalDetails || 'No medical details provided'}</p>
           </div>
-        </div>
-      `;
-    });
+        `;
+      });
 
-    // Edit Profile section
-    editBtn.addEventListener('click', () => {
-      content.innerHTML = `
-        <h2>Edit Profile</h2>
-        <p>Coming soon — here you’ll be able to edit your personal details.</p>
-        
-      `;
-    });
-
-    // Card Generation section
-    // Card Generation section
-cardBtn.addEventListener('click', () => {
-  content.innerHTML = `
-    <div class="card-generation-header">
-      <h2>Card Generation</h2>
-      <button class="download-btn">⬇ Download</button>
-    </div>
-
-    <p>Generate your CodeCare card with your details and QR code.</p>
-
-    <div class="card-generation">
-      <!-- Front Card -->
-      <div class="card front-card">
-        <div class="user-info">
-          <img src="https://cdn-icons-png.flaticon.com/512/848/848043.png" alt="Profile" class="profile-img">
-          <div class="details">
-            <p><strong>Name:</strong> User Name</p>
-            <p><strong>Age:</strong> 25</p>
-            <p><strong>Blood Group:</strong> O+</p>
-            <p><strong>Phone:</strong> +91 9876543210</p>
-            <p><strong>Email:</strong> username@email.com</p>
-            <p><strong>Emergency Contact:</strong> +91 9123456789</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Back Card -->
-      <div class="card back-card">
-        <div class="back-content">
-          <div class="address">
-            <p><strong>Address:</strong></p>
-            <p>123, MG Road, Kochi</p>
-          </div>
-          <div class="qr">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=CodeCare-User123" alt="QR Code">
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-});
-
-
-    // Logout
-    logoutBtn.addEventListener('click', () => {
-      window.location.href = "../login/login.html";
+      logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('user');
+        window.location.href = '../login/login.html';
+      });
     });
   </script>
 
