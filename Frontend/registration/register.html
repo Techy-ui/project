@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>Registration Form</title> <!-- Fixed title mismatch -->
     <link rel="icon" type="image/x-icon" href="../home/logo.png">
     <link rel="stylesheet" href="register.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -82,32 +82,64 @@
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
 
+                // Basic validation (trim whitespace)
+                const inputs = form.querySelectorAll('input[required], textarea[required]');
+                let isValid = true;
+                inputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        isValid = false;
+                        input.style.border = '1px solid red'; // Visual feedback
+                    } else {
+                        input.style.border = ''; // Reset
+                    }
+                });
+                if (!isValid) {
+                    alert('Please fill all required fields.');
+                    return;
+                }
+
                 const formData = {
-                    name: document.querySelector('.Name input').value,
+                    name: document.querySelector('.Name input').value.trim(),
                     age: parseInt(document.querySelector('.Age input').value),
-                    address: document.querySelector('.Address textarea').value,
-                    phone: document.querySelector('.Phone input').value,
-                    bloodGroup: document.querySelector('.Blood input').value,
-                    medicalDetails: document.querySelector('.Medical textarea').value,
-                    emergencyContact: document.querySelector('.Emergency input').value,
-                    email: document.querySelector('.Email input').value,
-                    password: document.querySelector('.Password input').value
+                    address: document.querySelector('.Address textarea').value.trim(),
+                    phone: document.querySelector('.Phone input').value.trim(),
+                    bloodGroup: document.querySelector('.Blood input').value.trim(),
+                    medicalDetails: document.querySelector('.Medical textarea').value.trim() || '', // Optional
+                    emergencyContact: document.querySelector('.Emergency input').value.trim(),
+                    email: document.querySelector('.Email input').value.trim(),
+                    password: document.querySelector('.Password input').value.trim()
                 };
 
-                // 🔑 Replace localhost with your Railway URL
+                console.log('Sending data:', formData); // Debug: Check in browser console
+
+                // 🔑 Your Railway URL - keep this
                 fetch('https://project-production-65f9.up.railway.app/api/register', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        // Add mode: 'cors' explicitly if needed
+                    },
                     body: JSON.stringify(formData)
                 })
-                .then(response => response.text())
-                .then(data => {
-                    alert(data);
-                    if (data.includes('successfully')) {
-                        window.location.href = '../Individual/dashboard.html';
+                .then(response => {
+                    console.log('Response status:', response.status); // Debug
+                    if (!response.ok) {
+                        // Handle errors like 404/405 here
+                        return response.text().then(text => {
+                            throw new Error(`HTTP ${response.status}: ${text}`);
+                        });
                     }
+                    return response.text(); // Or .json() if you change backend to JSON
                 })
-                .catch(err => alert('Error: ' + err));
+                .then(data => {
+                    console.log('Success data:', data); // Debug
+                    alert('Registration successful: ' + data);
+                    window.location.href = '../Individual/dashboard.html';
+                })
+                .catch(err => {
+                    console.error('Fetch error:', err); // Debug
+                    alert('Registration failed: ' + err.message);
+                });
             });
         });
     </script>
