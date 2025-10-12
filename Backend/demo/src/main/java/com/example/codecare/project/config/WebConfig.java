@@ -9,8 +9,13 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://techy-ui.github.io/project/Frontend/") // your frontend url
-                .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
-                .allowedHeaders("*");
+                .allowedOrigins(
+                    "https://techy-ui.github.io/project", // GitHub Pages root domain
+                    "http://localhost:5500",      // Local dev (live server)
+                    "http://localhost:3000"       // React dev if any
+                )
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }
