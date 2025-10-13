@@ -84,6 +84,29 @@ public class UserController {
             return ResponseEntity.status(500).build();
         }
     }
+    @PutMapping("/user/{email}")
+    public ResponseEntity<?> updateUserProfile(
+            @PathVariable String email,
+            @RequestBody User updatedUser) {
+    
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isEmpty()) return ResponseEntity.notFound().build();
+    
+        User user = userOpt.get();
+    
+        // Update editable fields
+        user.setName(updatedUser.getName());
+        user.setAge(updatedUser.getAge());
+        user.setBloodGroup(updatedUser.getBloodGroup());
+        user.setPhone(updatedUser.getPhone());
+        user.setEmergencyContact(updatedUser.getEmergencyContact());
+        user.setAddress(updatedUser.getAddress());
+    
+        userRepository.save(user);
+        return ResponseEntity.ok("Profile updated successfully");
+    }
+
+
 
 
 }
