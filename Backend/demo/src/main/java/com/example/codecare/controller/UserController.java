@@ -3,7 +3,15 @@ package com.example.codecare.controller;
 import com.example.codecare.model.User;
 import com.example.codecare.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
+import java.nio.file.Path;
+import org.springframework.core.io.Resource;
+
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 @RestController
@@ -26,4 +34,56 @@ public class UserController {
         return user.map(ResponseEntity::ok)
                    .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @PostMapping("/user/{email}/upload-photo")
+    public ResponseEntity<?> uploadProfilePhoto(
+            @PathVariable String email,
+            @RequestParam("file") MultipartFile file) {
+
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isEmpty()) return ResponseEntity.notFound().build();
+
+        try {
+            User user = userOpt.get();
+
+            // Save file to filesystem
+            String folder = "uploads/profile_photos/";
+            String filename = email + "_" + file.getOriginalFilename();
+            Path path = Paths.get(folder + filename);
+            Files.createDirectories(path.getParent()); // create folder if not exists
+            Files.write(path, file.getBytes());
+
+            // Save path in database
+            user.setPhotoPath(path.toString());
+            userRepository.save(user);
+
+            return ResponseEntity.ok("Photo uploaded successfully");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to upload photo: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/user/{email}/photo")
+    public ResponseEntity<Resource> getUserPhoto(@PathVariable String email) {
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isEmpty() || userOpt.get().getPhotoPath() == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        try {
+            Path path = Paths.get(userOpt.get().getPhotoPath());
+            Resource resource = new UrlResource(path.toUri());
+            String contentType = Files.probeContentType(path);
+
+            return ResponseEntity.ok()
+                    .header("Content-Type", contentType != null ? contentType : "application/octet-stream")
+                    .body(resource);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+
 }

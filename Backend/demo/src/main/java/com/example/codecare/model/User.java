@@ -1,6 +1,11 @@
 package com.example.codecare.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 /**
  * User entity representing a user in the system.
@@ -39,6 +44,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(length = 255)
+    private String photoPath;
+
     // Default constructor
     public User() {}
 
@@ -72,4 +80,7 @@ public class User {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public String getPhotoPath() { return photoPath; }
+    public void setPhotoPath(String photoPath) { this.photoPath = photoPath; }
 }
