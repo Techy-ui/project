@@ -84,8 +84,8 @@ async function loadCard() {
               <p>${user.address}</p>
             </div>
             <div class="qr">
-              <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(`../hospital/hospital.html?user=${user.email}`)}" alt="QR Code">
-              <p style="text-align:center; font-size:14px; margin-top:5px; color:#555; margin-left:15px;">Only for hospital use</p>
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(`https://techy-ui.github.io/project/Frontend/hospital/hospital.html?user=${user.email}}`)}" alt="QR Code">
+              <p style="text-align:center; font-size:14px; margin-top:5px; color:#555; margin-left:15px;">(Only for hospital use)</p>
             </div>
           </div>
         </div>
@@ -99,19 +99,18 @@ document.getElementById('downloadBtn').addEventListener('click', async () => {
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF({ unit: 'px', format: 'a4' });
 
-  // Create temporary wrappers with border and bg color for PDF
   const frontCard = document.getElementById('frontCard');
   const backCard = document.getElementById('backCard');
 
-  // Apply PDF styling temporarily
+  // Temporarily add border & background for PDF
   frontCard.style.border = "2px solid #4CAF50";
   frontCard.style.backgroundColor = "#f0fff0";
   backCard.style.border = "2px solid #4CAF50";
   backCard.style.backgroundColor = "#f9fff9";
 
-  // Capture cards as canvas
-  const frontCanvas = await html2canvas(frontCard);
-  const backCanvas = await html2canvas(backCard);
+  // Capture cards as canvas (useCORS ensures images are loaded)
+  const frontCanvas = await html2canvas(frontCard, { useCORS: true, allowTaint: true, scale: 2 });
+  const backCanvas = await html2canvas(backCard, { useCORS: true, allowTaint: true, scale: 2 });
 
   const frontImgData = frontCanvas.toDataURL('image/png');
   const backImgData = backCanvas.toDataURL('image/png');
@@ -119,7 +118,8 @@ document.getElementById('downloadBtn').addEventListener('click', async () => {
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
 
-  const cardWidth = (pageWidth - 60) / 2; // 30px margin left & right
+  // Resize cards to fit PDF nicely
+  const cardWidth = (pageWidth - 60) / 2; 
   const frontHeight = frontCanvas.height * (cardWidth / frontCanvas.width);
   const backHeight = backCanvas.height * (cardWidth / backCanvas.width);
   const cardHeight = Math.max(frontHeight, backHeight);
@@ -128,7 +128,7 @@ document.getElementById('downloadBtn').addEventListener('click', async () => {
   pdf.addImage(frontImgData, 'PNG', 30, (pageHeight - cardHeight)/2, cardWidth, frontHeight);
   pdf.addImage(backImgData, 'PNG', 30 + cardWidth + 10, (pageHeight - cardHeight)/2, cardWidth, backHeight);
 
-  // Reset styles
+  // Reset temporary styles
   frontCard.style.border = "";
   frontCard.style.backgroundColor = "";
   backCard.style.border = "";
