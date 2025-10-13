@@ -97,34 +97,46 @@ async function loadCard() {
     // Add download functionality
 document.getElementById('downloadBtn').addEventListener('click', async () => {
   const { jsPDF } = window.jspdf;
-
   const pdf = new jsPDF({ unit: 'px', format: 'a4' });
 
-  // Capture front and back cards separately
-  const frontCanvas = await html2canvas(document.getElementById('frontCard'));
-  const backCanvas = await html2canvas(document.getElementById('backCard'));
+  // Create temporary wrappers with border and bg color for PDF
+  const frontCard = document.getElementById('frontCard');
+  const backCard = document.getElementById('backCard');
+
+  // Apply PDF styling temporarily
+  frontCard.style.border = "2px solid #4CAF50";
+  frontCard.style.backgroundColor = "#f0fff0";
+  backCard.style.border = "2px solid #4CAF50";
+  backCard.style.backgroundColor = "#f9fff9";
+
+  // Capture cards as canvas
+  const frontCanvas = await html2canvas(frontCard);
+  const backCanvas = await html2canvas(backCard);
 
   const frontImgData = frontCanvas.toDataURL('image/png');
   const backImgData = backCanvas.toDataURL('image/png');
 
-  // Calculate width/height for both cards to fit side by side
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
-  
-  const cardWidth = (pageWidth - 60) / 2; // 30px margin on each side
+
+  const cardWidth = (pageWidth - 60) / 2; // 30px margin left & right
   const frontHeight = frontCanvas.height * (cardWidth / frontCanvas.width);
   const backHeight = backCanvas.height * (cardWidth / backCanvas.width);
   const cardHeight = Math.max(frontHeight, backHeight);
 
-  // Draw front card on the left
-  pdf.addImage(frontImgData, 'PNG', 30, (pageHeight - cardHeight) / 2, cardWidth, frontHeight);
+  // Draw front and back cards side by side
+  pdf.addImage(frontImgData, 'PNG', 30, (pageHeight - cardHeight)/2, cardWidth, frontHeight);
+  pdf.addImage(backImgData, 'PNG', 30 + cardWidth + 10, (pageHeight - cardHeight)/2, cardWidth, backHeight);
 
-  // Draw back card on the right
-  pdf.addImage(backImgData, 'PNG', 30 + cardWidth + 10, (pageHeight - cardHeight) / 2, cardWidth, backHeight);
+  // Reset styles
+  frontCard.style.border = "";
+  frontCard.style.backgroundColor = "";
+  backCard.style.border = "";
+  backCard.style.backgroundColor = "";
 
-  // Save PDF
   pdf.save(`${user.name}_CodeCare_Card.pdf`);
-  });
+});
+
 
   } catch (err) {
     console.error(err);
