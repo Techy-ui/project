@@ -1,9 +1,23 @@
+/* === COMMON STYLES === */
 body {
   margin: 0;
   font-family: 'Dekko', cursive;
   background: url("https://techy-ui.github.io/Project-pig/back.png") no-repeat center center fixed;
   background-size: cover;
   color: #4d2b1f;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+h1, h2, h3 {
+  margin: 0;
+}
+
+button {
+  cursor: pointer;
 }
 
 /* Header */
@@ -36,7 +50,7 @@ body {
   display: block;
   font-size: 0.7rem;
   color: #fff;
-  font-family: "Edu NSW ACT Hand Pre", cursive;
+  font-family: "Edu NSW ACT Hand", cursive;
   margin-top: 2px;
 }
 
@@ -53,7 +67,7 @@ body {
   color: #b15b40;
 }
 
-/* Dashboard Layout */
+/* === DASHBOARD LAYOUT === */
 .dashboard {
   display: flex;
   margin-top: 20px;
@@ -80,7 +94,6 @@ body {
   border: none;
   font-size: 1.5rem;
   margin-bottom: 10px;
-  cursor: pointer;
 }
 
 .sidebar ul {
@@ -112,18 +125,25 @@ body {
   transition: all 0.3s ease;
 }
 
+/* Headings inside content */
 .content h2 {
   margin: 0;
   font-size: 1.7rem;
 }
 
+.content h3 {
+  margin-top: 15px;
+  font-size: 1.3rem;
+}
+
+/* Tagline */
 .tagline {
   margin-top: 5px;
   color: #3b1f1a;
   font-size: 1rem;
 }
 
-/* Profile Card */
+/* === PROFILE CARD === */
 .profile-card {
   display: flex;
   align-items: center;
@@ -135,6 +155,7 @@ body {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   padding: 30px;
   margin-top: 20px;
+  flex-wrap: wrap;
 }
 
 .profile-image img {
@@ -163,7 +184,7 @@ body {
   color: #5a3a32;
 }
 
-/* Card Generation Section */
+/* === CARD GENERATION === */
 .card-generation {
   display: flex;
   justify-content: space-around;
@@ -172,7 +193,6 @@ body {
   gap: 30px;
 }
 
-/* Common card styling */
 .card {
   background: rgba(255, 255, 255, 0.8);
   border-radius: 20px;
@@ -227,41 +247,82 @@ body {
 
 /* Download button */
 .download-btn {
-  background: none;
-  border: none;
-  font-size: 1rem;
-  color: #4a2f2a;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.download-btn:hover {
-  color: #b15b40;
-}
-.card-generation-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-
-.card-generation-header h2 {
-  margin: 0;
-  font-size: 1.7rem;
-}
-
-.card-generation-header .download-btn {
   background-color: #f7a3b5;
   color: white;
   border: none;
   padding: 8px 15px;
   border-radius: 10px;
-  cursor: pointer;
   font-size: 1rem;
   transition: 0.3s;
 }
 
-.card-generation-header .download-btn:hover {
+.download-btn:hover {
   background-color: #b15b40;
+}
+
+/* === FORMS === */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  max-width: 400px;
+}
+
+form input, form button {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #d2b48c;
+  font-size: 1rem;
+}
+
+form button {
+  background-color: #f7a3b5;
+  color: white;
+  border: none;
+  transition: 0.3s;
+}
+
+form button:hover {
+  background-color: #b15b40;
+}
+
+img#profilePhoto {
+  border-radius: 50%;
+  border: 3px solid #d2b48c;
+  margin-top: 10px;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 900px) {
+  .dashboard {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .sidebar {
+    margin: 0 0 20px 0;
+    width: 90%;
+    max-height: none;
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .profile-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .front-card .user-info {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .back-card .back-content {
+    flex-direction: column;
+    align-items: center;
+  }
 }

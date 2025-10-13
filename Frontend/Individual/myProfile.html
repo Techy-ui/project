@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - CodeCare</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+  <header>
+    <h1>My Profile</h1>
+    <a href="dashboard.html">← Back to Dashboard</a>
+  </header>
+
+  <div class="content" id="contentArea">
+    <p>Loading profile...</p>
+  </div>
+
+  <script>
+    const API_BASE = "https://project-production-65f9.up.railway.app/api";
+    const userEmail = localStorage.getItem('userEmail');
+    const content = document.getElementById('contentArea');
+
+    if (!userEmail) window.location.href = "../login/login.html";
+
+    async function fetchUserProfile() {
+      try {
+        const res = await fetch(`${API_BASE}/user/${userEmail}`);
+        if (!res.ok) throw new Error('Failed to fetch profile');
+        const user = await res.json();
+        content.innerHTML = `
+          <div class="profile-card">
+            <img src="${API_BASE}/user/${userEmail}/photo" alt="Profile Photo" width="150" height="150">
+            <h2>${user.name}</h2>
+            <p><strong>Age:</strong> ${user.age || 'N/A'}</p>
+            <p><strong>Blood Group:</strong> ${user.bloodGroup || 'N/A'}</p>
+            <p><strong>Phone:</strong> ${user.phone || 'N/A'}</p>
+            <p><strong>Email:</strong> ${user.email}</p>
+            <p><strong>Emergency Contact:</strong> ${user.emergencyContact || 'N/A'}</p>
+            <p><strong>Address:</strong> ${user.address || 'N/A'}</p>
+          </div>
+        `;
+      } catch(err) {
+        content.innerHTML = '<p>Failed to load profile. Try again later.</p>';
+      }
+    }
+
+    fetchUserProfile();
+  </script>
+
+</body>
+</html>
