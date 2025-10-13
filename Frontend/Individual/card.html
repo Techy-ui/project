@@ -94,24 +94,38 @@ async function loadCard() {
     `;
 
     // Add download functionality
-    document.getElementById('downloadBtn').addEventListener('click', async () => {
-      const { jsPDF } = window.jspdf;
+    // Add download functionality
+document.getElementById('downloadBtn').addEventListener('click', async () => {
+  const { jsPDF } = window.jspdf;
 
-      const pdf = new jsPDF({ unit: 'px', format: 'a4' });
+  const pdf = new jsPDF({ unit: 'px', format: 'a4' });
 
-      // Capture front card
-      const frontCanvas = await html2canvas(document.getElementById('frontCard'));
-      const frontImgData = frontCanvas.toDataURL('image/png');
-      pdf.addImage(frontImgData, 'PNG', 50, 50, 500, 300); // Adjust position & size
+  // Capture front and back cards separately
+  const frontCanvas = await html2canvas(document.getElementById('frontCard'));
+  const backCanvas = await html2canvas(document.getElementById('backCard'));
 
-      // Add a new page for back card
-      pdf.addPage();
-      const backCanvas = await html2canvas(document.getElementById('backCard'));
-      const backImgData = backCanvas.toDataURL('image/png');
-      pdf.addImage(backImgData, 'PNG', 50, 50, 500, 300);
+  const frontImgData = frontCanvas.toDataURL('image/png');
+  const backImgData = backCanvas.toDataURL('image/png');
 
-      // Save PDF
-      pdf.save(`${user.name}_CodeCare_Card.pdf`);
+  // Calculate width/height for both cards to fit side by side
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  
+  const cardWidth = (pageWidth - 60) / 2; // 30px margin on each side
+  const frontHeight = frontCanvas.height * (cardWidth / frontCanvas.width);
+  const backHeight = backCanvas.height * (cardWidth / backCanvas.width);
+  const cardHeight = Math.max(frontHeight, backHeight);
+
+  // Draw front card on the left
+  pdf.addImage(frontImgData, 'PNG', 30, (pageHeight - cardHeight) / 2, cardWidth, frontHeight);
+
+  // Draw back card on the right
+  pdf.addImage(backImgData, 'PNG', 30 + cardWidth + 10, (pageHeight - cardHeight) / 2, cardWidth, backHeight);
+
+  // Save PDF
+  pdf.save(`${user.name}_CodeCare_Card.pdf`);
+});
+
     });
 
   } catch (err) {
