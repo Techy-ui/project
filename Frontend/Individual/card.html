@@ -54,12 +54,12 @@
             <div class="user-info">
               <img src="${API_BASE}/user/${userEmail}/photo" alt="Profile Photo" width="150" height="150">
               <div class="details">
-                <p><strong>Name:</strong> ${updatedUser.name}</p>
-                <p><strong>Age:</strong> ${updatedUser.age}</p>
-                <p><strong>Blood Group:</strong> ${updatedUser.bloodGroup}</p>
-                <p><strong>Phone:</strong> ${updatedUser.phone}</p>
-                <p><strong>Email:</strong> ${updatedUser.email}</p>
-                <p><strong>Emergency Contact:</strong> ${updatedUser.emergencyContact}</p>
+                <p><strong>Name:</strong> ${user.name}</p>
+                <p><strong>Age:</strong> ${user.age}</p>
+                <p><strong>Blood Group:</strong> ${user.bloodGroup}</p>
+                <p><strong>Phone:</strong> ${user.phone}</p>
+                <p><strong>Email:</strong> ${user.email}</p>
+                <p><strong>Emergency Contact:</strong> ${user.emergencyContact}</p>
               </div>
             </div>
 
@@ -68,10 +68,10 @@
             <div class="back-content">
               <div class="address">
                 <p><strong>Address:</strong></p>
-                <p>${updatedUser.address}</p>
+                <p>${user.address}</p>
               </div>
               <div class="qr">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=CodeCare-${encodeURIComponent(updatedUser.name)}" alt="QR Code">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=CodeCare-${encodeURIComponent(user.name)}" alt="QR Code">
               </div>
             </div>
       `;
