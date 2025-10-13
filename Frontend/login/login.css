@@ -6,7 +6,7 @@
 }
 
 body {
-  height: 100vh;
+  min-height: 100vh;
   font-family: "Dekko", cursive;
   background: url('https://techy-ui.github.io/Project-pig/back.png') center/cover no-repeat;
   color: #222;
@@ -20,17 +20,20 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
+  padding: 15px 20px;
+  flex-wrap: wrap; /* allow wrapping on smaller screens */
 }
 
 .title-row {
   display: flex;
   align-items: center;
   gap: 15px;
+  flex-wrap: wrap;
 }
 
 .title-row img {
   width: 60px;
+  max-width: 80px;
   height: auto;
 }
 
@@ -69,6 +72,7 @@ body {
   flex: 1;
   padding: 40px 80px;
   gap: 60px;
+  flex-wrap: wrap; /* wrap for small screens */
 }
 
 /* Left Section (Login Card) */
@@ -76,28 +80,31 @@ body {
   flex: 1;
   display: flex;
   justify-content: center;
+  min-width: 300px; /* ensures minimum size */
 }
 
 .login-box {
   background-color: rgba(255, 255, 255, 0.25);
   border-radius: 25px;
-  padding: 40px 60px;
+  padding: 30px 40px;
   text-align: center;
   backdrop-filter: blur(5px);
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 400px;
 }
 
 .login-title {
   font-family: "Merienda", cursive;
   color: #442822;
   font-size: 2rem;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .login-options {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 20px;
   align-items: center;
 }
 
@@ -108,19 +115,23 @@ body {
   justify-content: space-between;
   background-color: rgba(255,255,255,0.2);
   border-radius: 20px;
-  padding: 15px 25px;
-  width: 320px;
+  padding: 15px 20px;
+  width: 100%;
+  max-width: 320px;
   gap: 15px;
   transition: transform 0.2s ease, background 0.3s ease;
+  flex-wrap: wrap; /* allow wrapping inside card */
 }
 
 .login-card img {
   width: 80px;
+  max-width: 100px;
   height: auto;
 }
 
 .login-card button {
   flex: 1;
+  min-width: 100px;
   height: 40px;
   border: none;
   border-radius: 20px;
@@ -147,6 +158,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 250px; /* ensures it doesn’t shrink too much */
 }
 
 .login-right img {
@@ -156,19 +168,65 @@ body {
 }
 
 /* Responsive Design */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .main-container {
     flex-direction: column;
     padding: 20px;
     gap: 30px;
   }
 
-  .login-card {
+  .login-left, .login-right {
     width: 100%;
-    max-width: 300px;
+  }
+
+  .login-card {
+    max-width: 90%;
   }
 
   .login-right img {
     width: 70%;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-box {
+    padding: 20px 25px;
+  }
+
+  .login-card button {
+    font-size: 0.9rem;
+  }
+
+  .login-right img {
+    width: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  .title-row h1 {
+    font-size: 1.5rem;
+  }
+
+  .title-row sub {
+    font-size: 0.5rem;
+  }
+
+  .login-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .login-card img {
+    margin-bottom: 10px;
+  }
+
+  .login-card button {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .login-right img {
+    width: 90%;
   }
 }
