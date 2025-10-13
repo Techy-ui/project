@@ -44,120 +44,122 @@
 
   <!-- JavaScript -->
   <script>
-    // 🟢 Update this to your actual backend URL
-    const API_BASE = "https://project-production-65f9.up.railway.app/api";
+const API_BASE = "https://project-production-65f9.up.railway.app/api";
 
-    const content = document.getElementById('contentArea');
-    const profileBtn = document.getElementById('btnProfile');
-    const editBtn = document.getElementById('btnEdit');
-    const cardBtn = document.getElementById('btnCard');
-    const logoutBtn = document.getElementById('btnLogout');
+const content = document.getElementById('contentArea');
+const profileBtn = document.getElementById('btnProfile');
+const editBtn = document.getElementById('btnEdit');
+const cardBtn = document.getElementById('btnCard');
+const logoutBtn = document.getElementById('btnLogout');
 
-    // Load logged-in user info from localStorage
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (!user) {
-      alert('Please login first.');
-      window.location.href = "../login/login.html";
-    }
+// Get logged-in user email from localStorage
+const userEmail = localStorage.getItem('userEmail');
+if (!userEmail) {
+  alert('Please login first.');
+  window.location.href = "../login/login.html";
+}
 
-    // 🟣 Fetch latest user profile from backend
-    async function fetchUserProfile() {
-      try {
-        const response = await fetch(`${API_BASE}/user/${user.email}`);
-        if (response.ok) {
-          const data = await response.json();
-          localStorage.setItem('user', JSON.stringify(data)); // update local cache
-          return data;
-        } else {
-          console.warn('Failed to fetch user profile:', response.status);
-          return user;
-        }
-      } catch (err) {
-        console.error('Error fetching profile:', err);
-        return user;
-      }
-    }
+// Fetch full user profile from backend
+async function fetchUserProfile() {
+  try {
+    const response = await fetch(`${API_BASE}/user/${userEmail}`);
+    if (!response.ok) throw new Error('Failed to fetch profile');
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error('Error fetching profile:', err);
+    return null;
+  }
+}
 
-    // 🧩 My Profile section
-    profileBtn.addEventListener('click', async () => {
-      const updatedUser = await fetchUserProfile();
-      content.innerHTML = `
-        <h2>Welcome, ${updatedUser.name || 'User'}</h2>
-        <p class="tagline">Your health, just a scan away</p>
-        <div class="profile-card">
-          <div class="profile-image">
-            <img src="https://cdn-icons-png.flaticon.com/512/848/848043.png" alt="Profile Picture">
-          </div>
-          <div class="profile-info">
-            <h3>${updatedUser.name}</h3>
-            <p><strong>Age:</strong> ${updatedUser.age || 'N/A'}</p>
-            <p><strong>Blood Group:</strong> ${updatedUser.bloodGroup || 'N/A'}</p>
-            <p><strong>Phone:</strong> ${updatedUser.phone || 'N/A'}</p>
-            <p><strong>E-mail:</strong> ${updatedUser.email}</p>
-            <p><strong>Emergency Contact:</strong> ${updatedUser.emergencyContact || 'N/A'}</p>
-            <p><strong>Address:</strong> ${updatedUser.address || 'N/A'}</p>
-          </div>
-        </div>
-      `;
-    });
+// My Profile
+profileBtn.addEventListener('click', async () => {
+  const user = await fetchUserProfile();
+  if (!user) {
+    content.innerHTML = '<p>Failed to load profile. Please try again.</p>';
+    return;
+  }
 
-    // 🛠 Edit Profile (future expansion)
-    editBtn.addEventListener('click', () => {
-      content.innerHTML = `
-        <h2>Edit Profile</h2>
-        <p>Coming soon — here you’ll be able to edit your personal details.</p>
-      `;
-    });
+  content.innerHTML = `
+    <h2>Welcome, ${user.name}</h2>
+    <p class="tagline">Your health, just a scan away</p>
+    <div class="profile-card">
+      <div class="profile-image">
+        <img src="https://cdn-icons-png.flaticon.com/512/848/848043.png" alt="Profile Picture">
+      </div>
+      <div class="profile-info">
+        <h3>${user.name}</h3>
+        <p><strong>Age:</strong> ${user.age || 'N/A'}</p>
+        <p><strong>Blood Group:</strong> ${user.bloodGroup || 'N/A'}</p>
+        <p><strong>Phone:</strong> ${user.phone || 'N/A'}</p>
+        <p><strong>Email:</strong> ${user.email}</p>
+        <p><strong>Emergency Contact:</strong> ${user.emergencyContact || 'N/A'}</p>
+        <p><strong>Address:</strong> ${user.address || 'N/A'}</p>
+      </div>
+    </div>
+  `;
+});
 
-    // 💳 Card Generation
-    cardBtn.addEventListener('click', async () => {
-      const updatedUser = await fetchUserProfile();
-      content.innerHTML = `
-        <div class="card-generation-header">
-          <h2>Card Generation</h2>
-          <button class="download-btn">⬇ Download</button>
-        </div>
+// Card Generation
+cardBtn.addEventListener('click', async () => {
+  const user = await fetchUserProfile();
+  if (!user) {
+    content.innerHTML = '<p>Failed to load card. Please try again.</p>';
+    return;
+  }
 
-        <p>Generate your CodeCare card with your details and QR code.</p>
+  content.innerHTML = `
+    <div class="card-generation-header">
+      <h2>Card Generation</h2>
+      <button class="download-btn">⬇ Download</button>
+    </div>
 
-        <div class="card-generation">
-          <!-- Front Card -->
-          <div class="card front-card">
-            <div class="user-info">
-              <img src="https://cdn-icons-png.flaticon.com/512/848/848043.png" alt="Profile" class="profile-img">
-              <div class="details">
-                <p><strong>Name:</strong> ${updatedUser.name}</p>
-                <p><strong>Age:</strong> ${updatedUser.age}</p>
-                <p><strong>Blood Group:</strong> ${updatedUser.bloodGroup}</p>
-                <p><strong>Phone:</strong> ${updatedUser.phone}</p>
-                <p><strong>Email:</strong> ${updatedUser.email}</p>
-                <p><strong>Emergency Contact:</strong> ${updatedUser.emergencyContact}</p>
-              </div>
-            </div>
-          </div>
+    <p>Generate your CodeCare card with your details and QR code.</p>
 
-          <!-- Back Card -->
-          <div class="card back-card">
-            <div class="back-content">
-              <div class="address">
-                <p><strong>Address:</strong></p>
-                <p>${updatedUser.address}</p>
-              </div>
-              <div class="qr">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=CodeCare-${encodeURIComponent(updatedUser.name)}" alt="QR Code">
-              </div>
-            </div>
+    <div class="card-generation">
+      <div class="card front-card">
+        <div class="user-info">
+          <img src="https://cdn-icons-png.flaticon.com/512/848/848043.png" alt="Profile" class="profile-img">
+          <div class="details">
+            <p><strong>Name:</strong> ${user.name}</p>
+            <p><strong>Age:</strong> ${user.age}</p>
+            <p><strong>Blood Group:</strong> ${user.bloodGroup}</p>
+            <p><strong>Phone:</strong> ${user.phone}</p>
+            <p><strong>Email:</strong> ${user.email}</p>
+            <p><strong>Emergency Contact:</strong> ${user.emergencyContact}</p>
           </div>
         </div>
-      `;
-    });
+      </div>
 
-    // 🚪 Logout
-    logoutBtn.addEventListener('click', () => {
-      localStorage.removeItem('user');
-      window.location.href = "../login/login.html";
-    });
-  </script>
+      <div class="card back-card">
+        <div class="back-content">
+          <div class="address">
+            <p><strong>Address:</strong></p>
+            <p>${user.address}</p>
+          </div>
+          <div class="qr">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=CodeCare-${encodeURIComponent(user.name)}" alt="QR Code">
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+});
+
+// Edit Profile (optional for future)
+editBtn.addEventListener('click', () => {
+  content.innerHTML = `
+    <h2>Edit Profile</h2>
+    <p>Coming soon — here you’ll be able to edit your personal details.</p>
+  `;
+});
+
+// Logout
+logoutBtn.addEventListener('click', () => {
+  localStorage.removeItem('userEmail');
+  window.location.href = "../login/login.html";
+});
+</script>
 
 </body>
 </html>

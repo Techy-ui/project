@@ -49,37 +49,39 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const form = document.getElementById('loginForm');
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('loginForm');
 
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value.trim();
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
 
-        if(!email.includes('@')) {
-          alert('Please enter a valid email.');
-          return;
-        }
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
 
-        fetch('https://project-production-65f9.up.railway.app/api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        })
-        .then(response => {
-          if(!response.ok) throw new Error('Invalid email or password');
-          return response.json();
-        })
-        .then(user => {
-          // Store logged in user info
-          localStorage.setItem('user', JSON.stringify(user));
-          window.location.href = 'dashboard.html';
-        })
-        .catch(err => alert('Login failed: ' + err.message));
-      });
-    });
-  </script>
+    if (!email.includes('@')) {
+      alert('Please enter a valid email.');
+      return;
+    }
+
+    fetch('https://project-production-65f9.up.railway.app/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Invalid email or password');
+      return response.json();
+    })
+    .then(user => {
+      // ✅ Store only the email in localStorage to fetch full profile later
+      localStorage.setItem('userEmail', user.email);
+      window.location.href = 'dashboard.html';
+    })
+    .catch(err => alert('Login failed: ' + err.message));
+  });
+});
+</script>
+
 
 </body>
 </html>
