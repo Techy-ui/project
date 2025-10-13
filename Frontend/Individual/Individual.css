@@ -14,12 +14,14 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
+  flex-wrap: wrap;
 }
 
 .title-row {
   display: flex;
   align-items: center;
   gap: 15px;
+  flex-wrap: wrap;
 }
 
 .title-row img {
@@ -83,6 +85,7 @@ body {
   border-radius: 20px;
   padding: 40px;
   width: 320px;
+  max-width: 90%;
   text-align: center;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
@@ -129,4 +132,71 @@ button {
 
 button:hover {
   background-color: #f47a9b;
+}
+
+/* === RESPONSIVE === */
+@media screen and (max-width: 768px) {
+  .header {
+    padding: 10px 20px;
+  }
+
+  .title-row h1 {
+    font-size: 1.5rem;
+  }
+
+  .title-row sub {
+    font-size: 0.6rem;
+  }
+
+  .login-container {
+    height: auto;
+    padding: 20px 0;
+  }
+
+  .login-card {
+    padding: 30px 20px;
+  }
+
+  input {
+    width: 95%;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .title-row img {
+    width: 40px;
+  }
+
+  .title-row h1 {
+    font-size: 1.2rem;
+  }
+
+  .login-card {
+    padding: 20px 15px;
+    width: 95%;
+  }
+
+  label {
+    font-size: 0.9rem;
+  }
+
+  input {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  button {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.85rem;
+    margin-left: 10px;
+  }
 }
