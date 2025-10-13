@@ -1,85 +1,124 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Card Generation - CodeCare</title>
   <link rel="stylesheet" href="dashboard.css">
+
+  <!-- Include jsPDF and html2canvas -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
-  <header class="header">
-    <div class="title-row">
-      <img src="../home/logo.png" alt="CodeCare Logo">
-      <h1>CodeCare<sub>Your Health, Just a Scan Away</sub></h1>
-    </div>
-    <nav class="nav-links">
-      <a href="../home/home.html">Home</a>
-    </nav>
-  </header>
+<header class="header">
+  <div class="title-row">
+    <img src="../home/logo.png" alt="CodeCare Logo">
+    <h1>CodeCare<sub>Your Health, Just a Scan Away</sub></h1>
+  </div>
+  <nav class="nav-links">
+    <a href="../home/home.html">Home</a>
+  </nav>
+</header>
 
-  <div class="dashboard">
-    <div class="sidebar">
-      <ul>
-        <li><a href="myProfile.html">My Profile</a></li>
-        <li><a href="editprofile.html">Edit Profile</a></li>
-        <li><a href="card.html">Card Generation</a></li>
-        <li id="btnLogout">Logout</li>
-      </ul>
-    </div>
+<div class="dashboard">
+  <div class="sidebar">
+    <ul>
+      <li><a href="myProfile.html">My Profile</a></li>
+      <li><a href="editprofile.html">Edit Profile</a></li>
+      <li><a href="card.html">Card Generation</a></li>
+      <li id="btnLogout">Logout</li>
+    </ul>
+  </div>
 
   <div class="content" id="contentArea"></div>
 
-  <script>
-    const API_BASE = "https://project-production-65f9.up.railway.app/api";
-    const userEmail = localStorage.getItem('userEmail');
-    const content = document.getElementById('contentArea');
-    if (!userEmail) window.location.href = "../login/login.html";
+</div>
 
-    async function loadCard() {
-      const res = await fetch(`${API_BASE}/user/${userEmail}`);
-      const user = await res.json();
+<script>
+const API_BASE = "https://project-production-65f9.up.railway.app/api";
+const userEmail = localStorage.getItem('userEmail');
+const content = document.getElementById('contentArea');
+if (!userEmail) window.location.href = "../login/login.html";
 
-      content.innerHTML = `
-        <div class="card-generation-header">
-          <h2>Card Generation</h2>
-          <button class="download-btn">⬇ Download</button>
+async function loadCard() {
+  try {
+    const res = await fetch(`${API_BASE}/user/${userEmail}`);
+    if (!res.ok) throw new Error('Failed to fetch profile');
+    const user = await res.json();
+
+    // Generate unique QR code data (you can use user.email or user.id)
+    const qrData = `CodeCare-${user.email}`;
+
+    content.innerHTML = `
+      <div class="card-generation-header">
+        <h2>Card Generation</h2>
+        <button class="download-btn" id="downloadBtn">⬇ Download</button>
+      </div>
+
+      <p>Generate your CodeCare card with your details and QR code.</p>
+
+      <div class="card-generation" id="cardContainer">
+        <!-- Front Card -->
+        <div class="card front-card" id="frontCard">
+          <div class="user-info">
+            <img src="${API_BASE}/user/${userEmail}/photo" alt="Profile Photo" width="150" height="150">
+            <div class="details">
+              <p><strong>Name:</strong> ${user.name}</p>
+              <p><strong>Age:</strong> ${user.age}</p>
+              <p><strong>Blood Group:</strong> ${user.bloodGroup}</p>
+              <p><strong>Phone:</strong> ${user.phone}</p>
+              <p><strong>Email:</strong> ${user.email}</p>
+              <p><strong>Emergency Contact:</strong> ${user.emergencyContact}</p>
+            </div>
+          </div>
         </div>
 
-        <p>Generate your CodeCare card with your details and QR code.</p>
-
-        <div class="card-generation">
-          <!-- Front Card -->
-          <div class="card front-card">
-            <div class="user-info">
-              <img src="${API_BASE}/user/${userEmail}/photo" alt="Profile Photo" width="150" height="150">
-              <div class="details">
-                <p><strong>Name:</strong> ${user.name}</p>
-                <p><strong>Age:</strong> ${user.age}</p>
-                <p><strong>Blood Group:</strong> ${user.bloodGroup}</p>
-                <p><strong>Phone:</strong> ${user.phone}</p>
-                <p><strong>Email:</strong> ${user.email}</p>
-                <p><strong>Emergency Contact:</strong> ${user.emergencyContact}</p>
-              </div>
+        <!-- Back Card -->
+        <div class="card back-card" id="backCard">
+          <div class="back-content">
+            <div class="address">
+              <p><strong>Address:</strong></p>
+              <p>${user.address}</p>
             </div>
+            <div class="qr">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrData)}" alt="QR Code">
             </div>
+          </div>
+        </div>
+      </div>
+    `;
 
-          <!-- Back Card -->
-          <div class="card back-card">
-            <div class="back-content">
-              <div class="address">
-                <p><strong>Address:</strong></p>
-                <p>${user.address}</p>
-              </div>
-              <div class="qr">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=CodeCare-${encodeURIComponent(user.name)}" alt="QR Code">
-              </div>
-            </div>
-      `;
+    // Add download functionality
+    document.getElementById('downloadBtn').addEventListener('click', async () => {
+      const { jsPDF } = window.jspdf;
 
-    }
+      const pdf = new jsPDF({ unit: 'px', format: 'a4' });
 
-    loadCard();
-  </script>
+      // Capture front card
+      const frontCanvas = await html2canvas(document.getElementById('frontCard'));
+      const frontImgData = frontCanvas.toDataURL('image/png');
+      pdf.addImage(frontImgData, 'PNG', 50, 50, 500, 300); // Adjust position & size
+
+      // Add a new page for back card
+      pdf.addPage();
+      const backCanvas = await html2canvas(document.getElementById('backCard'));
+      const backImgData = backCanvas.toDataURL('image/png');
+      pdf.addImage(backImgData, 'PNG', 50, 50, 500, 300);
+
+      // Save PDF
+      pdf.save(`${user.name}_CodeCare_Card.pdf`);
+    });
+
+  } catch (err) {
+    console.error(err);
+    content.innerHTML = '<p>Failed to load profile. Try again later.</p>';
+  }
+}
+
+loadCard();
+</script>
+
 </body>
 </html>
