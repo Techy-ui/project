@@ -1,4 +1,4 @@
-package com.example.codecare.cofig;
+package com.example.codecare.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,14 +7,16 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
-
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf().disable()
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/register").permitAll()
+                .requestMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
-            );
+            )
+            .cors();
+
         return http.build();
     }
 }
