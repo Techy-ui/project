@@ -1,87 +1,194 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Individual Login - CodeCare</title>
-  <link rel="icon" type="image/x-icon" href="../home/logo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dekko&family=Merienda:wght@700&family=Edu+NSW+ACT+Hand:wght@500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="Individual.css">
-</head>
-<body>
+body {
+  margin: 0;
+  font-family: 'Dekko', cursive;
+  background: url("https://techy-ui.github.io/Project-pig/back.png") no-repeat center center fixed;
+  background-size: cover;
+  color: #4d2b1f;
+}
 
-  <!-- Header -->
-  <header class="header">
-    <div class="title-row">
-      <img src="../home/logo.png" alt="CodeCare Logo">
-      <h1>CodeCare<sub>Your Health, Just a Scan Away</sub></h1>
-    </div>
-    <nav class="nav-links">
-      <a href="../home/home.html">Home</a>
-      <a href="../login/login.html">Login</a>
-    </nav>
-  </header>
+/* Header */
+.header {
+  background-color: rgba(255, 255, 255, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  flex-wrap: wrap;
+}
 
-  <!-- Login Form -->
-  <div class="breadcrumb">
-    <a href="../home/home.html">Home</a> >> 
-    <a href="../login/login.html">Login</a> >> 
-    <span>Individual</span>
-  </div>
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
 
-  <div class="login-container">
-    <div class="login-card">
-      <h2>INDIVIDUAL LOGIN</h2>
-      <p class="sub">Enter Your credentials</p>
+.title-row img {
+  width: 60px;
+  height: auto;
+}
 
-      <form id="loginForm">
-        <label for="email">E-mail:</label>
-        <input type="email" id="email" placeholder="Enter your email" required>
+.title-row h1 {
+  font-family: "Merienda", cursive;
+  color: #69443c;
+  font-size: 1.8rem;
+}
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" placeholder="Enter your password" required>
+.title-row sub {
+  display: block;
+  font-size: 0.7rem;
+  color: #fff;
+  font-family: "Edu NSW ACT Hand Pre", cursive;
+  margin-top: 2px;
+}
 
-        <button type="submit">LOGIN</button>
-      </form>
-    </div>
-  </div>
+.nav-links a {
+  text-decoration: none;
+  color: #4b2a25;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-left: 15px;
+  transition: color 0.3s;
+}
 
-  <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const form = document.getElementById('loginForm');
+.nav-links a:hover {
+  color: #b15b40;
+}
 
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
+/* Breadcrumb */
+.breadcrumb {
+  margin-left: 15px;
+  margin-top: 5px;
+  font-size: 0.95rem;
+  flex-wrap: wrap;
+}
 
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
+.breadcrumb a {
+  text-decoration: none;
+  color: #3a1c1a;
+}
 
-    if (!email.includes('@')) {
-      alert('Please enter a valid email.');
-      return;
-    }
+.breadcrumb span {
+  color: #7a5a52;
+}
 
-    fetch('https://project-production-65f9.up.railway.app/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    })
-    .then(response => {
-      if (!response.ok) throw new Error('Invalid email or password');
-      return response.json();
-    })
-    .then(user => {
-      // ✅ Store only the email in localStorage to fetch full profile later
-      localStorage.setItem('userEmail', user.email);
-      window.location.href = 'dashboard.html';
-    })
-    .catch(err => alert('Login failed: ' + err.message));
-  });
-});
-</script>
+/* Login Container */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  padding: 10px;
+}
 
+/* Login Card */
+.login-card {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
+  padding: 40px;
+  width: 320px;
+  max-width: 90%;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
 
-</body>
-</html>
+.login-card h2 {
+  font-family: 'Dekko', cursive;
+  letter-spacing: 1px;
+  font-size: 1.5rem;
+}
+
+.sub {
+  color: #6a6a6a;
+  font-size: 0.9rem;
+  margin-top: -10px;
+  margin-bottom: 25px;
+}
+
+label {
+  display: block;
+  text-align: left;
+  font-size: 1rem;
+  margin: 10px 0 5px 10px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  background-color: #f7a3b5;
+  color: #3b1d18;
+  font-weight: bold;
+  border: none;
+  border-radius: 20px;
+  padding: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #f47a9b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 15px;
+  }
+
+  .title-row h1 {
+    font-size: 1.4rem;
+  }
+
+  .title-row sub {
+    font-size: 0.5rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.8rem;
+  }
+
+  .login-card {
+    padding: 30px 20px;
+    width: 90%;
+  }
+
+  .login-card h2 {
+    font-size: 1.3rem;
+  }
+
+  input, button {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 20px 15px;
+  }
+
+  .login-card h2 {
+    font-size: 1.1rem;
+  }
+
+  input, button {
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+
+  .breadcrumb {
+    font-size: 0.7rem;
+  }
+}
