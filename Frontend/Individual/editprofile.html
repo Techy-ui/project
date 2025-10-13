@@ -1,101 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Profile - CodeCare</title>
-  <link rel="stylesheet" href="dashboard.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Profile - CodeCare</title>
+<link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
 
-  <header class="header">
-    <div class="title-row">
-      <img src="../home/logo.png" alt="CodeCare Logo">
-      <h1>CodeCare<sub>Your Health, Just a Scan Away</sub></h1>
-    </div>
-    <nav class="nav-links">
-      <a href="../home/home.html">Home</a>
-    </nav>
-  </header>
+<header class="header">
+  <div class="title-row">
+    <img src="../home/logo.png" alt="CodeCare Logo">
+    <h1>CodeCare<sub>Your Health, Just a Scan Away</sub></h1>
+  </div>
+  <nav class="nav-links">
+    <a href="../home/home.html">Home</a>
+  </nav>
+</header>
 
-  <div class="dashboard">
-    <div class="sidebar">
-      <ul>
-        <li><a href="myProfile.html">My Profile</a></li>
-        <li><a href="editprofile.html">Edit Profile</a></li>
-        <li><a href="card.html">Card Generation</a></li>
-        <li id="btnLogout">Logout</li>
-      </ul>
-    </div>
+<div class="dashboard">
+  <div class="sidebar">
+    <ul>
+      <li><a href="myProfile.html">My Profile</a></li>
+      <li><a href="editprofile.html">Edit Profile</a></li>
+      <li><a href="card.html">Card Generation</a></li>
+      <li id="btnLogout">Logout</li>
+    </ul>
+  </div>
 
   <div class="content" id="contentArea"></div>
+</div>
 
-  <script>
-    const API_BASE = "https://project-production-65f9.up.railway.app/api";
-    const userEmail = localStorage.getItem('userEmail');
-    const content = document.getElementById('contentArea');
-    if (!userEmail) window.location.href = "../login/login.html";
+<script>
+const API_BASE = "https://project-production-65f9.up.railway.app/api";
+const userEmail = localStorage.getItem('userEmail');
+const content = document.getElementById('contentArea');
+if (!userEmail) window.location.href = "../login/login.html";
 
-    async function loadProfile() {
-      const res = await fetch(`${API_BASE}/user/${userEmail}`);
-      const user = await res.json();
+async function loadProfile() {
+  const res = await fetch(`${API_BASE}/user/${userEmail}`);
+  if (!res.ok) {
+    content.innerHTML = '<p>Failed to load profile.</p>';
+    return;
+  }
 
-      content.innerHTML = `
-        <form id="editProfileForm">
-          <label>Name:</label>
-          <input type="text" id="editName" value="${user.name || ''}" required>
-          <label>Phone:</label>
-          <input type="text" id="editPhone" value="${user.phone || ''}">
-          <label>Address:</label>
-          <input type="text" id="editAddress" value="${user.address || ''}">
-          <button type="submit">Save Changes</button>
-        </form>
+  const user = await res.json();
 
-        <h3>Update Profile Photo</h3>
-        <form id="photoForm" enctype="multipart/form-data">
-          <input type="file" id="photo" name="file" accept="image/*" required>
-          <button type="submit">Upload Photo</button>
-        </form>
-        <img id="profilePhoto" src="${API_BASE}/user/${userEmail}/photo" alt="Profile Photo" width="150" height="150">
-      `;
+  content.innerHTML = `
+    <h2>Edit Profile</h2>
+    <form id="editProfileForm">
+      <label>Name:</label>
+      <input type="text" id="editName" value="${user.name || ''}" required>
 
-      const editProfileForm = document.getElementById('editProfileForm');
-      const photoForm = document.getElementById('photoForm');
-      const profilePhoto = document.getElementById('profilePhoto');
+      <label>Age:</label>
+      <input type="number" id="editAge" value="${user.age || ''}">
 
-      editProfileForm.addEventListener('submit', async e => {
-        e.preventDefault();
-        const data = {
-          name: document.getElementById('editName').value,
-          phone: document.getElementById('editPhone').value,
-          address: document.getElementById('editAddress').value
-        };
-        const res = await fetch(`${API_BASE}/user/${userEmail}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-        alert(res.ok ? 'Profile updated!' : 'Update failed.');
-      });
+      <label>Blood Group:</label>
+      <input type="text" id="editBloodGroup" value="${user.bloodGroup || ''}">
 
-      photoForm.addEventListener('submit', async e => {
-        e.preventDefault();
-        const fileInput = document.getElementById('photo');
-        const formData = new FormData();
-        formData.append('file', fileInput.files[0]);
+      <label>Phone:</label>
+      <input type="text" id="editPhone" value="${user.phone || ''}">
 
-        const res = await fetch(`${API_BASE}/user/${userEmail}/upload-photo`, {
-          method: 'POST',
-          body: formData
-        });
-        if (res.ok) {
-          alert('Photo uploaded successfully');
-          profilePhoto.src = `${API_BASE}/user/${userEmail}/photo?timestamp=${new Date().getTime()}`;
-        } else alert('Photo upload failed');
-      });
-    }
+      <label>Emergency Contact:</label>
+      <input type="text" id="editEmergency" value="${user.emergencyContact || ''}">
 
-    loadProfile();
-  </script>
+      <label>Address:</label>
+      <input type="text" id="editAddress" value="${user.address || ''}">
+
+      <button type="submit">Save Changes</button>
+    </form>
+
+    <h3>Update Profile Photo</h3>
+    <form id="photoForm" enctype="multipart/form-data">
+      <input type="file" id="photo" name="file" accept="image/*">
+      <button type="submit">Upload Photo</button>
+    </form>
+
+    <img id="profilePhoto" src="${API_BASE}/user/${userEmail}/photo" alt="Profile Photo" width="150" height="150" style="margin-top:10px;">
+  `;
+
+  const editProfileForm = document.getElementById('editProfileForm');
+  const photoForm = document.getElementById('photoForm');
+  const profilePhoto = document.getElementById('profilePhoto');
+
+  // Handle profile info update
+  editProfileForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const data = {
+      name: document.getElementById('editName').value,
+      age: parseInt(document.getElementById('editAge').value),
+      bloodGroup: document.getElementById('editBloodGroup').value,
+      phone: document.getElementById('editPhone').value,
+      emergencyContact: document.getElementById('editEmergency').value,
+      address: document.getElementById('editAddress').value
+    };
+
+    const res = await fetch(`${API_BASE}/user/${userEmail}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    if (res.ok) alert('Profile updated successfully!');
+    else alert('Failed to update profile');
+  });
+
+  // Handle photo upload
+  photoForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const fileInput = document.getElementById('photo');
+    if (!fileInput.files[0]) return alert('Select a photo first');
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+
+    const res = await fetch(`${API_BASE}/user/${userEmail}/upload-photo`, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (res.ok) {
+      alert('Photo uploaded successfully');
+      profilePhoto.src = `${API_BASE}/user/${userEmail}/photo?timestamp=${new Date().getTime()}`;
+    } else alert('Photo upload failed');
+  });
+}
+
+loadProfile();
+
+// Logout
+document.getElementById('btnLogout').addEventListener('click', () => {
+  localStorage.removeItem('userEmail');
+  window.location.href = "../login/login.html";
+});
+</script>
+
 </body>
 </html>
