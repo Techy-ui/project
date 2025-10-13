@@ -45,16 +45,21 @@
         if (!res.ok) throw new Error('Failed to fetch profile');
         const user = await res.json();
         content.innerHTML = `
-          <div class="profile-card">
+        <h2>Welcome, ${updatedUser.name || 'User'}</h2>
+        <p class="tagline">Your health, just a scan away</p>
+        <div class="profile-card">
+          <div class="profile-image">
             <img src="${API_BASE}/user/${userEmail}/photo" alt="Profile Photo" width="150" height="150">
-            <h2>${user.name}</h2>
-            <p><strong>Age:</strong> ${user.age || 'N/A'}</p>
-            <p><strong>Blood Group:</strong> ${user.bloodGroup || 'N/A'}</p>
-            <p><strong>Phone:</strong> ${user.phone || 'N/A'}</p>
-            <p><strong>Email:</strong> ${user.email}</p>
-            <p><strong>Emergency Contact:</strong> ${user.emergencyContact || 'N/A'}</p>
-            <p><strong>Address:</strong> ${user.address || 'N/A'}</p>
           </div>
+          <div class="profile-info">
+            <h3>${updatedUser.name}</h3>
+            <p><strong>Age:</strong> ${updatedUser.age || 'N/A'}</p>
+            <p><strong>Blood Group:</strong> ${updatedUser.bloodGroup || 'N/A'}</p>
+            <p><strong>Phone:</strong> ${updatedUser.phone || 'N/A'}</p>
+            <p><strong>E-mail:</strong> ${updatedUser.email}</p>
+            <p><strong>Emergency Contact:</strong> ${updatedUser.emergencyContact || 'N/A'}</p>
+            <p><strong>Address:</strong> ${updatedUser.address || 'N/A'}</p>
+            </div>
         `;
       } catch(err) {
         content.innerHTML = '<p>Failed to load profile. Try again later.</p>';

@@ -257,33 +257,33 @@ button {
 }
 
 .download-btn:hover {
-  background-color: #b15b40;
+  color: #b15b40;
 }
-
-/* === FORMS === */
-form {
+.card-generation-header {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 20px;
-  max-width: 400px;
+  margin-bottom: 10px;
 }
 
-form input, form button {
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #d2b48c;
-  font-size: 1rem;
+.card-generation-header h2 {
+  margin: 0;
+  font-size: 1.7rem;
 }
 
-form button {
+.card-generation-header .download-btn {
   background-color: #f7a3b5;
   color: white;
   border: none;
+  padding: 8px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
   transition: 0.3s;
 }
 
-form button:hover {
+.card-generation-header .download-btn:hover {
   background-color: #b15b40;
 }
 

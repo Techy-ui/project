@@ -41,23 +41,41 @@
       const user = await res.json();
 
       content.innerHTML = `
-        <div class="card-generation">
-          <div class="card front-card">
-            <div>
-              <img src="${API_BASE}/user/${userEmail}/photo" alt="Profile" class="profile-img" width="100" height="100">
-              <p><strong>Name:</strong> ${user.name}</p>
-              <p><strong>Age:</strong> ${user.age}</p>
-              <p><strong>Blood Group:</strong> ${user.bloodGroup}</p>
-            </div>
-          </div>
-          <div class="card back-card">
-            <div>
-              <p><strong>Address:</strong> ${user.address}</p>
-              <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=CodeCare-${encodeURIComponent(user.name)}" alt="QR Code">
-            </div>
-          </div>
+        <div class="card-generation-header">
+          <h2>Card Generation</h2>
+          <button class="download-btn">⬇ Download</button>
         </div>
+
+        <p>Generate your CodeCare card with your details and QR code.</p>
+
+        <div class="card-generation">
+          <!-- Front Card -->
+          <div class="card front-card">
+            <div class="user-info">
+              <img src="${API_BASE}/user/${userEmail}/photo" alt="Profile Photo" width="150" height="150">
+              <div class="details">
+                <p><strong>Name:</strong> ${updatedUser.name}</p>
+                <p><strong>Age:</strong> ${updatedUser.age}</p>
+                <p><strong>Blood Group:</strong> ${updatedUser.bloodGroup}</p>
+                <p><strong>Phone:</strong> ${updatedUser.phone}</p>
+                <p><strong>Email:</strong> ${updatedUser.email}</p>
+                <p><strong>Emergency Contact:</strong> ${updatedUser.emergencyContact}</p>
+              </div>
+            </div>
+
+          <!-- Back Card -->
+          <div class="card back-card">
+            <div class="back-content">
+              <div class="address">
+                <p><strong>Address:</strong></p>
+                <p>${updatedUser.address}</p>
+              </div>
+              <div class="qr">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=CodeCare-${encodeURIComponent(updatedUser.name)}" alt="QR Code">
+              </div>
+            </div>
       `;
+
     }
 
     loadCard();
