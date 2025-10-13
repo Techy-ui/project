@@ -82,7 +82,7 @@
     profileBtn.addEventListener('click', async () => {
       const updatedUser = await fetchUserProfile();
       content.innerHTML = `
-        <h2>Welcome, ${updatedUser.name || 'User'}</h2>
+        <h2>Welcome, ${User.name || 'User'}</h2>
         <p class="tagline">Your health, just a scan away</p>
         <div class="profile-card">
           <div class="profile-image">
