@@ -44,8 +44,8 @@
 
   <!-- JavaScript -->
   <script>
-    // 🟢 Change this to your backend URL if deployed
-    const API_BASE = "https://your-backend-url.up.railway.app/api";
+    // 🟢 Update this to your actual backend URL
+    const API_BASE = "https://your-backend-name.up.railway.app/api";
 
     const content = document.getElementById('contentArea');
     const profileBtn = document.getElementById('btnProfile');
@@ -60,13 +60,13 @@
       window.location.href = "../login/login.html";
     }
 
-    // 🟣 Fetch updated profile from backend
+    // 🟣 Fetch latest user profile from backend
     async function fetchUserProfile() {
       try {
-        const response = await fetch(`${API_BASE}/users/${user.email}`);
+        const response = await fetch(`${API_BASE}/user/${user.email}`);
         if (response.ok) {
           const data = await response.json();
-          localStorage.setItem('user', JSON.stringify(data));
+          localStorage.setItem('user', JSON.stringify(data)); // update local cache
           return data;
         } else {
           console.warn('Failed to fetch user profile:', response.status);
@@ -78,7 +78,7 @@
       }
     }
 
-    // 🧩 My Profile
+    // 🧩 My Profile section
     profileBtn.addEventListener('click', async () => {
       const updatedUser = await fetchUserProfile();
       content.innerHTML = `
@@ -121,6 +121,7 @@
         <p>Generate your CodeCare card with your details and QR code.</p>
 
         <div class="card-generation">
+          <!-- Front Card -->
           <div class="card front-card">
             <div class="user-info">
               <img src="https://cdn-icons-png.flaticon.com/512/848/848043.png" alt="Profile" class="profile-img">
@@ -135,6 +136,7 @@
             </div>
           </div>
 
+          <!-- Back Card -->
           <div class="card back-card">
             <div class="back-content">
               <div class="address">

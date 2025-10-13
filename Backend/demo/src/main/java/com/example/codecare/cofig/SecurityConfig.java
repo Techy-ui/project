@@ -1,4 +1,4 @@
-package com.example.codecare.config;
+package com.example.codecare.cofig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
