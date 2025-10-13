@@ -67,6 +67,11 @@
     }
 
     fetchUserProfile();
+
+    document.getElementById('btnLogout').addEventListener('click', () => {
+        localStorage.removeItem('userEmail');
+        window.location.href = "../login/login.html";
+    });
   </script>
 
 </body>
