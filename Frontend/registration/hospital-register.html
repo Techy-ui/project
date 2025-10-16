@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Registration</title>
+  <link rel="icon" type="image/x-icon" href="../home/logo.png">
+  <link rel="stylesheet" href="register.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&family=Edu+NSW+ACT+Hand+Pre:wght@400..700&family=Dekko&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="title-row">
+      <img src="../home/logo.png" alt="CodeCare Logo">
+      <h1>CodeCare<sub>Your Health, Just a Scan Away</sub></h1>
+    </div>
+    <nav class="nav-links">
+      <a href="../home/home.html">Home</a>
+    </nav>
+  </header>
+
+  <!-- Registration Container -->
+  <div class="container">
+    <div class="form">
+      <h1>Hospital Registration</h1>
+    </div>
+
+    <form id="hospitalRegisterForm" class="card">
+      <div class="row">
+        <!-- Left Column -->
+        <div class="left">
+          <div class="Name">
+            <h3 style="display: inline-block; margin-right: 60px;">Hospital Name:</h3>
+            <input type="text" placeholder="Enter Hospital Name" required>
+          </div>
+
+          <div class="Address">
+            <h3 style="display: inline-block; margin-right: 42px;">Address:</h3>
+            <textarea placeholder="Enter Hospital Address" required></textarea>
+          </div>
+
+          <div class="Phone">
+            <h3 style="display: inline-block; margin-right: 34px;">Phone no:</h3>
+            <input type="tel" placeholder="Enter Hospital Phone number" required>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right">
+          <div class="Email">
+            <h3 style="display: inline-block; margin-right: 110px;">E-Mail:</h3>
+            <input type="email" placeholder="Enter Hospital E-Mail" required>
+          </div>
+
+          <div class="Password">
+            <h3 style="display: inline-block; margin-right: 90px;">Password:</h3>
+            <input type="password" placeholder="Enter Password" required>
+          </div>
+
+          <div class="ConfirmPassword">
+            <h3 style="display: inline-block; margin-right: 50px;">Confirm Password:</h3>
+            <input type="password" placeholder="Confirm Password" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button type="submit">Register</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.getElementById('hospitalRegisterForm');
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const name = document.querySelector('.Name input').value.trim();
+        const address = document.querySelector('.Address textarea').value.trim();
+        const phone = document.querySelector('.Phone input').value.trim();
+        const email = document.querySelector('.Email input').value.trim();
+        const password = document.querySelector('.Password input').value.trim();
+        const confirmPassword = document.querySelector('.ConfirmPassword input').value.trim();
+
+        // Basic validation
+        if (!name || !address || !phone || !email || !password) {
+          alert('Please fill all required fields.');
+          return;
+        }
+        if (password !== confirmPassword) {
+          alert('Passwords do not match!');
+          return;
+        }
+
+        const formData = { name, address, phone, email, password };
+
+        // Send POST request to backend
+        fetch('https://project-production-65f9.up.railway.app/api/hospital/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        })
+          .then(response => response.text())
+          .then(data => {
+            if (data.toLowerCase().includes('success')) {
+              alert(data);
+              window.location.href = 'hospital.html';
+            } else {
+              alert('Registration failed: ' + data);
+            }
+          })
+          .catch(err => {
+            console.error('Fetch error:', err);
+            alert('Registration failed: ' + err.message);
+          });
+      });
+    });
+  </script>
+
+</body>
+</html>
