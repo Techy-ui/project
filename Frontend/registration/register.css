@@ -132,7 +132,7 @@ body {
     white-space: nowrap;      
     margin-right: 15px;
 }
-.Name input, .Age input, .Phone input, .Blood input,.Emergency input,.Email input,.Password input {
+.Name input, .Age input, .Phone input, .Blood input,.Emergency input,.Email input,.Password input,.Confirm-Password input {
     height: 25px;
     font-size: 12px;
     border-radius: 5px;
