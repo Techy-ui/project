@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@CrossOrigin(origins = "https://techy-ui.github.io")
 @RestController
 @RequestMapping("/api/hospital")
 public class HospitalController {
