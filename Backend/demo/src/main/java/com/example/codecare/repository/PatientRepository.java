@@ -1,6 +1,6 @@
 package com.example.codecare.repository;
 
-import com.example.codecare.entity.Patient;
+import com.example.codecare.model.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
