@@ -45,11 +45,14 @@ let cameraActive = false;
 
 // Initialize scanner
 const qrScanner = new QrScanner(video, result => {
-    if (!result) return;               // ❌ Ignore undefined scans
-    handleQRData(result.trim());       // ✅ Safely trim
+    if (!result) return;
+    // result may be string or object
+    const dataString = typeof result === 'string' ? result : result.data;
+    if (!dataString) return;
+    handleQRData(dataString.trim());
 });
 
-// Toggle camera
+// Camera toggle
 cameraBtn.addEventListener('click', async () => {
     if (!cameraActive) {
         await qrScanner.start();
@@ -62,7 +65,7 @@ cameraBtn.addEventListener('click', async () => {
     }
 });
 
-// Upload button
+// File upload
 uploadBtn.addEventListener('click', () => {
     if (cameraActive) {
         qrScanner.stop();
@@ -72,34 +75,34 @@ uploadBtn.addEventListener('click', () => {
     fileInput.click();
 });
 
-// Handle file input
 fileInput.addEventListener('change', async () => {
     if (fileInput.files.length === 0) return;
     try {
-        const result = await QrScanner.scanImage(fileInput.files[0], { returnDetailedScanResult: false });
-        if (!result) throw new Error("No QR code found in image");
-        handleQRData(result.trim());
+        // Use returnDetailedScanResult: true to get object
+        const resultObj = await QrScanner.scanImage(fileInput.files[0], { returnDetailedScanResult: true });
+        const dataString = resultObj?.data;
+        if (!dataString) throw new Error("No QR code found");
+        handleQRData(dataString.trim());
     } catch (err) {
         alert('Failed to read QR code: ' + err.message);
     }
 });
 
-// Unified QR handler
+// Handle QR
 function handleQRData(rawData) {
     if (!rawData) return;
 
     let parsedData;
     try {
-        parsedData = JSON.parse(rawData); // try JSON (new QR format)
+        parsedData = JSON.parse(rawData);
         displayPatient(parsedData);
-        localStorage.setItem('patientData', JSON.stringify(parsedData)); // store updated data
+        localStorage.setItem('patientData', JSON.stringify(parsedData));
     } catch (e) {
-        // fallback: fetch from backend using email or ID from old QR
         fetchPatient(rawData);
     }
 }
 
-// Display patient info
+// Display patient
 function displayPatient(data) {
     patientInfoDiv.style.display = 'block';
     document.getElementById('name').textContent = `Name: ${data.name || 'N/A'}`;
@@ -112,7 +115,7 @@ function displayPatient(data) {
     document.getElementById('address').textContent = `Address: ${data.address || 'N/A'}`;
 }
 
-// Fetch for old QR formats
+// Fetch old QR format
 async function fetchPatient(email) {
     try {
         const res = await fetch(`${API_BASE}/user/${encodeURIComponent(email)}`);
@@ -127,6 +130,7 @@ async function fetchPatient(email) {
     }
 }
 </script>
+
 
 </body>
 </html>
