@@ -91,31 +91,32 @@ async function loadCard() {
       </div>
     `;
 
-    // 📄 Download as PDF
-    document.getElementById("downloadBtn").addEventListener("click", async () => {
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({ unit: "px", format: "a4" });
+    /// 📄 Download as PDF
+document.getElementById("downloadBtn").addEventListener("click", async () => {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ unit: "px", format: "a4" });
 
-      const frontCard = document.getElementById("frontCard");
-      const backCard = document.getElementById("backCard");
+  const frontCard = document.getElementById("frontCard");
+  const backCard = document.getElementById("backCard");
 
-      const frontCanvas = await html2canvas(frontCard, { useCORS: true, scale: 2 });
-      const backCanvas = await html2canvas(backCard, { useCORS: true, scale: 2 });
+  const frontCanvas = await html2canvas(frontCard, { useCORS: true, scale: 2 });
+  const backCanvas = await html2canvas(backCard, { useCORS: true, scale: 2 });
 
-      const frontImgData = frontCanvas.toDataURL("image/png");
-      const backImgData = backCanvas.toDataURL("image/png");
+  const frontImgData = frontCanvas.toDataURL("image/png");
+  const backImgData = backCanvas.toDataURL("image/png");
 
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const cardWidth = (pageWidth - 60) / 2;
-      const frontHeight = frontCanvas.height * (cardWidth / frontCanvas.width);
-      const backHeight = backCanvas.height * (cardWidth / backCanvas.width);
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const topMargin = 30; // distance from top of page
+  const cardWidth = (pageWidth - 60) / 2;
+  const frontHeight = frontCanvas.height * (cardWidth / frontCanvas.width);
+  const backHeight = backCanvas.height * (cardWidth / backCanvas.width);
 
-      pdf.addImage(frontImgData, "PNG", 30, (pageHeight - frontHeight)/2, cardWidth, frontHeight);
-      pdf.addImage(backImgData, "PNG", 30 + cardWidth + 10, (pageHeight - backHeight)/2, cardWidth, backHeight);
+  pdf.addImage(frontImgData, "PNG", 30, topMargin, cardWidth, frontHeight);
+  pdf.addImage(backImgData, "PNG", 30 + cardWidth + 10, topMargin, cardWidth, backHeight);
 
-      pdf.save(`${user.name}_CodeCare_Card.pdf`);
-    });
+  pdf.save(`${user.name}_CodeCare_Card.pdf`);
+});
+
 
   } catch (err) {
     console.error(err);
