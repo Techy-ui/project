@@ -1,31 +1,18 @@
-package com.example.codecare.service;
+package com.example.codecare.repository;
 
-import com.example.codecare.model.Patient;
-import com.example.codecare.repository.PatientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.example.codecare.entity.Patient;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Service
-public class PatientService {
+@Repository
+public interface PatientRepository extends JpaRepository<Patient, Long> {
 
-    @Autowired
-    private PatientRepository patientRepository;
+    // Now returns Optional<Patient> for safe handling
+    Optional<Patient> findByQrCode(String qrCode);
 
-    // Get patient by QR code
-    public Patient getPatientByQrCode(String qrCode) {
-        // Returns the patient if found, otherwise null
-        return patientRepository.findByQrCode(qrCode).orElse(null);
-    }
+    Optional<Patient> findByEmail(String email);
 
-    // Save a patient
-    public Patient savePatient(Patient patient) {
-        return patientRepository.save(patient);
-    }
-
-    // Get all patients
-    public Iterable<Patient> getAllPatients() {
-        return patientRepository.findAll();
-    }
+    Optional<Patient> findByPatientId(String patientId);
 }
