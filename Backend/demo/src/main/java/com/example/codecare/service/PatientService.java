@@ -14,9 +14,13 @@ public class PatientService {
     private PatientRepository patientRepository;
 
     // Get patient by QR code
-    public Patient getPatientByQrCode(String qrCode) {
-        // Returns the patient if found, otherwise null
-        return patientRepository.findByQrCode(qrCode).orElse(null);
+    public Optional<Patient> findByQrCode(String qrCode) {
+        // Maps to patientId in entity
+        return patientRepository.findByPatientId(qrCode);
+    }
+
+    public Optional<Patient> findByEmail(String email) {
+        return patientRepository.findByEmail(email);
     }
 
     // Save a patient
