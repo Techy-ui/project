@@ -16,26 +16,21 @@
     </div>
   </header>
 
-  <main>
+  <main class="content">
     <h2>Hospital Dashboard</h2>
 
-    <div class="dashboard-main">
-
-      <!-- QR Code Scanner Box -->
-      <div class="qr-scanner-box">
-        <h3>Scan Patient QR Code</h3>
+    <div class="qr-scanner-container">
+      <h3>Scan Patient QR Code</h3>
+      <div class="qr-box">
         <video id="preview" width="300" height="300"></video>
-
         <div class="qr-options">
-          <button type="button" id="cameraBtn">Camera</button>
-          <button type="button" id="uploadBtn">Upload File</button>
+          <button id="cameraBtn">Use Camera</button>
+          <button id="uploadBtn">Upload File</button>
           <input type="file" id="qrFileInput" accept="image/*" style="display:none;">
         </div>
       </div>
-
     </div>
 
-    <!-- Patient Info -->
     <div id="patientInfo" class="patient-info" style="display:none;">
       <h3>Patient Details</h3>
       <p id="name"></p>
@@ -54,54 +49,39 @@
 
     const video = document.getElementById('preview');
     const patientInfoDiv = document.getElementById('patientInfo');
-
-    // Initialize QR Scanner
-    const qrScanner = new QrScanner(video, result => {
-        console.log('QR Code scanned:', result);
-        fetchPatient(result);
-    });
-
-    qrScanner.start();
-
-    // Buttons and file input
-    const cameraBtn = document.getElementById('cameraBtn');
-    const uploadBtn = document.getElementById('uploadBtn');
     const fileInput = document.getElementById('qrFileInput');
 
-    cameraBtn.addEventListener('click', () => {
+    let qrScanner = new QrScanner(video, result => {
+        fetchPatient(result.data.trim());
+    });
+
+    // Start camera by default when clicking "Use Camera"
+    document.getElementById('cameraBtn').addEventListener('click', () => {
         qrScanner.start();
     });
 
-    uploadBtn.addEventListener('click', () => {
+    // Trigger file input when clicking "Upload File"
+    document.getElementById('uploadBtn').addEventListener('click', () => {
         fileInput.click();
     });
 
-    fileInput.addEventListener('change', async (event) => {
-        if (event.target.files.length === 0) return;
-
-        const file = event.target.files[0];
-        try {
-            const result = await QrScanner.scanImage(file, { returnDetailedScanResult: true });
-            console.log('QR Code from file:', result.data);
-            fetchPatient(result.data);
-        } catch (err) {
-            alert('Could not read QR code from file.');
-            console.error(err);
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            QrScanner.scanImage(fileInput.files[0], { returnDetailedScanResult: true })
+                .then(result => fetchPatient(result.data.trim()))
+                .catch(err => alert('Failed to read QR code from image: ' + err));
         }
     });
 
-    // Fetch patient info from backend
     async function fetchPatient(patientId) {
         try {
             const res = await fetch(`https://project-production-65f9.up.railway.app/api/patient/${patientId}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             });
-
-            if (!res.ok) throw new Error('Patient not found');
+            if (!res.ok) throw new Error(`Patient not found: ${res.status}`);
 
             const data = await res.json();
-
             patientInfoDiv.style.display = 'block';
             document.getElementById('name').textContent = `Name: ${data.name}`;
             document.getElementById('age').textContent = `Age: ${data.age}`;
@@ -109,7 +89,8 @@
             document.getElementById('medicalDetails').textContent = `Medical Details: ${data.medicalDetails}`;
             document.getElementById('emergencyContact').textContent = `Emergency Contact: ${data.emergencyContact}`;
         } catch (err) {
-            alert(err.message);
+            console.error(err);
+            alert('Failed to fetch patient: ' + err.message);
         }
     }
   </script>
