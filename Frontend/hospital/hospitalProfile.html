@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Patient Profile - CodeCare</title>
-<link rel="stylesheet" href="dashboard.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Profile - CodeCare</title>
+  <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
 
@@ -14,7 +14,7 @@
     <h1>CodeCare<sub>Your Health, Just a Scan Away</sub></h1>
   </div>
   <nav class="nav-links">
-    <a href="hospitalDashboard.html">Back to Dashboard</a>
+    <a href="patientDashboard.html">Back to Dashboard</a>
     <span id="btnLogout" style="cursor:pointer;">Logout</span>
   </nav>
 </header>
@@ -22,44 +22,51 @@
 <div class="dashboard">
   <div class="sidebar">
     <ul>
-      <li><a href="hospitalProfile.html">Profile</a></li>
-      <li><a href="hospitalMedical.html">Medical Details</a></li>
-      <li><a href="hospitalEmergency.html">Emergency Contact</a></li>
+      <li><a href="patientProfile.html">Profile</a></li>
+      <li><a href="patientMedical.html">Medical Details</a></li>
+      <li><a href="patientEmergency.html">Emergency Contact</a></li>
     </ul>
   </div>
 
-  <div class="content">
-    <h2>Patient Profile</h2>
-    <p><strong>Name:</strong> <span id="pName"></span></p>
-    <p><strong>Age:</strong> <span id="pAge"></span></p>
-    <p><strong>Blood Group:</strong> <span id="pBlood"></span></p>
-    <p><strong>Email:</strong> <span id="pEmail"></span></p>
-    <p><strong>Phone:</strong> <span id="pPhone"></span></p>
-    <p><strong>Address:</strong> <span id="pAddress"></span></p>
+  <div class="content" id="contentArea">
+    <p>Loading patient profile...</p>
   </div>
 </div>
 
 <script>
-const patientData = JSON.parse(localStorage.getItem('patientData') || '{}');
+  const patientData = JSON.parse(localStorage.getItem('patientData') || '{}');
+  const content = document.getElementById('contentArea');
 
-if (!patientData || Object.keys(patientData).length === 0) {
-    alert("No patient data found. Please scan a QR code first.");
-    window.location.href = "qrScan.html";
-}
+  if (!patientData || Object.keys(patientData).length === 0) {
+      alert("No patient data found. Please scan a QR code first.");
+      window.location.href = "qrScan.html";
+  } else {
+      content.innerHTML = `
+      <h2>${patientData.name || 'Patient'}</h2>
+      <p class="tagline">Your health, just a scan away</p>
+      <div class="profile-card">
+        <div class="profile-image">
+          <img src="${patientData.photo || '../home/logo.png'}" alt="Patient Photo" width="150" height="150">
+        </div>
+        <div class="profile-info">
+          <p><strong>Name:</strong> ${patientData.name || 'N/A'}</p>
+          <p><strong>Age:</strong> ${patientData.age || 'N/A'}</p>
+          <p><strong>Blood Group:</strong> ${patientData.bloodGroup || 'N/A'}</p>
+          <p><strong>Phone:</strong> ${patientData.phone || 'N/A'}</p>
+          <p><strong>Email:</strong> ${patientData.email || 'N/A'}</p>
+          <p><strong>Emergency Contact:</strong> ${patientData.emergencyContact || 'N/A'}</p>
+          <p><strong>Address:</strong> ${patientData.address || 'N/A'}</p>
+          <p><strong>Medical Details:</strong> ${patientData.medicalDetails || 'N/A'}</p>
+        </div>
+      </div>
+      `;
+  }
 
-// Populate profile
-document.getElementById('pName').textContent = patientData.name || 'N/A';
-document.getElementById('pAge').textContent = patientData.age || 'N/A';
-document.getElementById('pBlood').textContent = patientData.bloodGroup || 'N/A';
-document.getElementById('pEmail').textContent = patientData.email || 'N/A';
-document.getElementById('pPhone').textContent = patientData.phone || 'N/A';
-document.getElementById('pAddress').textContent = patientData.address || 'N/A';
-
-// Logout
-document.getElementById('btnLogout').addEventListener('click', () => {
-    localStorage.removeItem('patientData');
-    window.location.href = "qrScan.html";
-});
+  // Logout
+  document.getElementById('btnLogout').addEventListener('click', () => {
+      localStorage.removeItem('patientData');
+      window.location.href = "patientDashboard.html";
+  });
 </script>
 
 </body>
