@@ -15,73 +15,39 @@
     </div>
     <nav class="nav-links">
         <a href="dashboard.html">Back to Scanner</a>
-        <span id="btnLogout" style="cursor:pointer;">Logout</span>
     </nav>
 </header>
 
 <div class="dashboard">
     <div class="sidebar">
         <ul>
-            <li><a href="patientDashboard.html">Profile</a></li>
-            <li><a href="patientDashboard.html">Medical Details</a></li>
-            <li><a href="patientDashboard.html">Emergency Contact</a></li>
+            <li><a href="patientProfile.html">Profile</a></li>
+            <li><a href="patientMedical.html">Medical Details</a></li>
+            <li><a href="patientEmergency.html">Emergency Contact</a></li>
+            <li id="btnLogout" style="cursor:pointer;">Logout</li>
         </ul>
     </div>
 
-    <div class="content">
-        <section id="profile">
-            <h2>Patient Profile</h2>
-            <p><strong>Name:</strong> <span id="pName"></span></p>
-            <p><strong>Age:</strong> <span id="pAge"></span></p>
-            <p><strong>Blood Group:</strong> <span id="pBlood"></span></p>
-            <p><strong>Email:</strong> <span id="pEmail"></span></p>
-            <p><strong>Phone:</strong> <span id="pPhone"></span></p>
-            <p><strong>Address:</strong> <span id="pAddress"></span></p>
-        </section>
-
-        <section id="medical">
-            <h2>Medical Details</h2>
-            <p id="pMedical"></p>
-        </section>
-
-        <section id="emergency">
-            <h2>Emergency Contact</h2>
-            <p id="pEmergency"></p>
-        </section>
+    <div class="content" id="contentArea">
+        <p style="color:#5a3a32; font-size:1.1rem;">
+            Welcome! Use the sidebar to view patient profile, medical details, or emergency contact information.
+        </p>
     </div>
 </div>
 
 <script>
-  // Fetch patient data from localStorage (set after QR scan)
+  // Check if patient data exists
   const patientData = JSON.parse(localStorage.getItem('patientData') || '{}');
-
   if (!patientData || Object.keys(patientData).length === 0) {
       alert("No patient data found. Please scan a QR code first.");
       window.location.href = "qrScan.html";
   }
 
-  // Populate sections
-  document.getElementById('pName').textContent = patientData.name || 'N/A';
-  document.getElementById('pAge').textContent = patientData.age || 'N/A';
-  document.getElementById('pBlood').textContent = patientData.bloodGroup || 'N/A';
-  document.getElementById('pEmail').textContent = patientData.email || 'N/A';
-  document.getElementById('pPhone').textContent = patientData.phone || 'N/A';
-  document.getElementById('pAddress').textContent = patientData.address || 'N/A';
-  document.getElementById('pMedical').textContent = patientData.medicalDetails || 'N/A';
-  document.getElementById('pEmergency').textContent = patientData.emergencyContact || 'N/A';
-
-  // Logout
+  // Logout button
   document.getElementById('btnLogout').addEventListener('click', () => {
       localStorage.removeItem('patientData');
-      window.location.href = "qrScan.html";
+      window.location.href = "qrScan.html"; // Redirect to scanner page
   });
-
-  // Optional: scroll to section if hash exists
-  const hash = window.location.hash;
-  if(hash) {
-      const section = document.querySelector(hash);
-      if(section) section.scrollIntoView({ behavior: 'smooth' });
-  }
 </script>
 
 </body>
