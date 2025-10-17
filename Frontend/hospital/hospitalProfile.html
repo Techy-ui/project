@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Patient Profile - CodeCare</title>
-<link rel="stylesheet" href="dashboard.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Profile - CodeCare</title>
+  <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
 
@@ -14,7 +14,7 @@
     <h1>CodeCare<sub>Your Health, Just a Scan Away</sub></h1>
   </div>
   <nav class="nav-links">
-    <a href="patientDashboard.html">Back to Dashboard</a>
+    <a href="hospitalDashboard.html">Back to Dashboard</a>
     <span id="btnLogout" style="cursor:pointer;">Logout</span>
   </nav>
 </header>
@@ -35,53 +35,83 @@
 </div>
 
 <script>
-  // Fetch latest patient data from localStorage
-  let patientData = JSON.parse(localStorage.getItem('patientData') || '{}');
-  const content = document.getElementById('contentArea');
+const API_BASE = "https://project-production-65f9.up.railway.app/api";
 
-  if (!patientData || Object.keys(patientData).length === 0) {
-      alert("No patient data found. Please scan a QR code first.");
-      window.location.href = "patientDashboard.html";
-  } else {
-      // Force photo to refresh (cache busting)
-      const photoURL = patientData.photo 
-        ? patientData.photo + '?t=' + new Date().getTime() 
-        : '../home/logo.png';
+// 1️⃣ Load patient email from QR data in localStorage
+const patientData = JSON.parse(localStorage.getItem('patientData') || '{}');
+const content = document.getElementById('contentArea');
 
-      content.innerHTML = `
-      <h2>${patientData.name || 'Patient'}</h2>
-      <p class="tagline">Your health, just a scan away</p>
-      <div class="profile-card">
-        <div class="profile-image">
-          <img src="${photoURL}" alt="Patient Photo" width="150" height="150">
-        </div>
-        <div class="profile-info">
-          <p><strong>Name:</strong> ${patientData.name || 'N/A'}</p>
-          <p><strong>Age:</strong> ${patientData.age || 'N/A'}</p>
-          <p><strong>Blood Group:</strong> ${patientData.bloodGroup || 'N/A'}</p>
-          <p><strong>Phone:</strong> ${patientData.phone || 'N/A'}</p>
-          <p><strong>Email:</strong> ${patientData.email || 'N/A'}</p>
-          <p><strong>Emergency Contact:</strong> ${patientData.emergencyContact || 'N/A'}</p>
-          <p><strong>Address:</strong> ${patientData.address || 'N/A'}</p>
-          <p><strong>Medical Details:</strong> ${patientData.medicalDetails || 'N/A'}</p>
-        </div>
-      </div>
-      `;
+if (!patientData.email) {
+    alert("No patient data found. Please scan a QR code first.");
+    window.location.href = "hospitalDashboard.html";
+}
 
-      // Update localStorage with cache-busting URL so next reload is fresh
-      patientData.photo = photoURL;
-      localStorage.setItem('patientData', JSON.stringify(patientData));
-  }
+// 2️⃣ Fetch the latest profile from server
+async function loadPatientProfile(email) {
+    try {
+        const res = await fetch(`${API_BASE}/user/${encodeURIComponent(email)}`);
+        if (!res.ok) throw new Error("Failed to fetch patient profile");
+        const latestData = await res.json();
 
-  // Logout from nav
-  function logout() {
-      localStorage.removeItem('patientData');
-      window.location.href = "patientDashboard.html";
-  }
+        // Update localStorage with latest info
+        localStorage.setItem('patientData', JSON.stringify(latestData));
 
-  document.getElementById('btnLogout').addEventListener('click', logout);
-  document.getElementById('btnLogoutSidebar').addEventListener('click', logout);
+        // Populate profile
+        content.innerHTML = `
+        <h2>${latestData.name || 'Patient'}</h2>
+        <p class="tagline">Your health, just a scan away</p>
+        <div class="profile-card">
+          <div class="profile-image">
+            <img src="${API_BASE}/user/${userEmail}/photo" alt="Patient Photo" width="150" height="150">
+          </div>
+          <div class="profile-info">
+            <p><strong>Name:</strong> ${latestData.name || 'N/A'}</p>
+            <p><strong>Age:</strong> ${latestData.age || 'N/A'}</p>
+            <p><strong>Blood Group:</strong> ${latestData.bloodGroup || 'N/A'}</p>
+            <p><strong>Phone:</strong> ${latestData.phone || 'N/A'}</p>
+            <p><strong>Email:</strong> ${latestData.email || 'N/A'}</p>
+            <p><strong>Emergency Contact:</strong> ${latestData.emergencyContact || 'N/A'}</p>
+            <p><strong>Address:</strong> ${latestData.address || 'N/A'}</p>
+            <p><strong>Medical Details:</strong> ${latestData.medicalDetails || 'N/A'}</p>
+          </div>
+        </div>`;
+    } catch (err) {
+        console.error(err);
+        alert("Failed to fetch latest patient data. Showing cached info.");
+        // Fallback: use localStorage
+        content.innerHTML = `
+        <h2>${patientData.name || 'Patient'}</h2>
+        <p class="tagline">Your health, just a scan away</p>
+        <div class="profile-card">
+          <div class="profile-image">
+            <img src="${patientData.photo || '../home/logo.png'}" alt="Patient Photo" width="150" height="150">
+          </div>
+          <div class="profile-info">
+            <p><strong>Name:</strong> ${patientData.name || 'N/A'}</p>
+            <p><strong>Age:</strong> ${patientData.age || 'N/A'}</p>
+            <p><strong>Blood Group:</strong> ${patientData.bloodGroup || 'N/A'}</p>
+            <p><strong>Phone:</strong> ${patientData.phone || 'N/A'}</p>
+            <p><strong>Email:</strong> ${patientData.email || 'N/A'}</p>
+            <p><strong>Emergency Contact:</strong> ${patientData.emergencyContact || 'N/A'}</p>
+            <p><strong>Address:</strong> ${patientData.address || 'N/A'}</p>
+            <p><strong>Medical Details:</strong> ${patientData.medicalDetails || 'N/A'}</p>
+          </div>
+        </div>`;
+    }
+}
 
+// 3️⃣ Load profile on page load
+loadPatientProfile(patientData.email);
+
+// 4️⃣ Logout buttons
+document.getElementById('btnLogout').addEventListener('click', () => {
+    localStorage.removeItem('patientData');
+    window.location.href = "hospitalDashboard.html";
+});
+document.getElementById('btnLogoutSidebar').addEventListener('click', () => {
+    localStorage.removeItem('patientData');
+    window.location.href = "hospitalDashboard.html";
+});
 </script>
 
 </body>
