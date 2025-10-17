@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hospital Dashboard</title>
+  <title>Hospital QR Scanner</title>
   <link rel="icon" type="image/x-icon" href="../home/logo.png">
   <link rel="stylesheet" href="dashboard.css">
 </head>
@@ -31,29 +31,15 @@
     </div>
   </div>
 
-  <!-- Patient Info Section -->
-  <div id="patientInfo" class="patient-info" style="display:none;">
-    <h3>Patient Details</h3>
-    <p id="name"></p>
-    <p id="age"></p>
-    <p id="bloodGroup"></p>
-    <p id="medicalDetails"></p>
-    <p id="emergencyContact"></p>
-    <p id="email"></p>
-    <p id="phone"></p>
-    <p id="address"></p>
-  </div>
 </main>
 
 <!-- QR Scanner Library -->
 <script type="module" src="https://cdn.jsdelivr.net/npm/qr-scanner@1.4.2/qr-scanner.min.js"></script>
 
-
 <script type="module">
 import QrScanner from "https://cdn.jsdelivr.net/npm/qr-scanner@1.4.2/qr-scanner.min.js";
 
 const video = document.getElementById('preview');
-const patientInfoDiv = document.getElementById('patientInfo');
 const fileInput = document.getElementById('qrFileInput');
 const cameraBtn = document.getElementById('cameraBtn');
 const uploadBtn = document.getElementById('uploadBtn');
@@ -79,7 +65,7 @@ cameraBtn.addEventListener('click', async () => {
     }
 });
 
-// Upload file button stops camera first
+// Upload file stops camera first
 uploadBtn.addEventListener('click', () => {
     if (cameraActive) {
         qrScanner.stop();
@@ -89,6 +75,7 @@ uploadBtn.addEventListener('click', () => {
     fileInput.click();
 });
 
+// Scan QR from uploaded image
 fileInput.addEventListener('change', async () => {
     if (fileInput.files.length > 0) {
         try {
@@ -100,44 +87,31 @@ fileInput.addEventListener('change', async () => {
     }
 });
 
-// Unified QR handler
+// Handle QR data and redirect
 function handleQRData(rawData) {
     try {
-        const parsed = JSON.parse(rawData); // Parse JSON if new QR
-        displayPatient(parsed);
+        const parsed = JSON.parse(rawData); // New QR format
+        localStorage.setItem('patientData', JSON.stringify(parsed));
+        window.location.href = "patientDashboard.html";
     } catch (e) {
+        // Old QR format (email only)
         fetchPatient(rawData);
     }
 }
 
-// Display patient info
-function displayPatient(data) {
-    patientInfoDiv.style.display = 'block';
-    document.getElementById('name').textContent = `Name: ${data.name || 'N/A'}`;
-    document.getElementById('age').textContent = `Age: ${data.age || 'N/A'}`;
-    document.getElementById('bloodGroup').textContent = `Blood Group: ${data.bloodGroup || 'N/A'}`;
-    document.getElementById('medicalDetails').textContent = `Medical Details: ${data.medicalDetails || 'N/A'}`;
-    document.getElementById('emergencyContact').textContent = `Emergency Contact: ${data.emergencyContact || 'N/A'}`;
-    document.getElementById('email').textContent = `Email: ${data.email || 'N/A'}`;
-    document.getElementById('phone').textContent = `Phone: ${data.phone || 'N/A'}`;
-    document.getElementById('address').textContent = `Address: ${data.address || 'N/A'}`;
-}
-
-// Fallback fetch for old QR format
+// Fetch patient for old QR format
 async function fetchPatient(email) {
     try {
         const res = await fetch(`${API_BASE}/user/${encodeURIComponent(email)}`);
         if (!res.ok) throw new Error(`Patient not found: ${res.status}`);
         const data = await res.json();
-        displayPatient(data);
+        localStorage.setItem('patientData', JSON.stringify(data));
+        window.location.href = "patientDashboard.html";
     } catch (err) {
         console.error(err);
         alert('Failed to fetch patient: ' + err.message);
-        patientInfoDiv.style.display = 'none';
     }
 }
-</script>
-
 </script>
 
 </body>

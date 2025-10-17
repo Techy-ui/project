@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Dashboard</title>
+<link rel="stylesheet" href="dashboard.css">
+<style>
+  body { font-family: Arial, sans-serif; }
+  .dashboard { max-width: 800px; margin: auto; padding: 20px; }
+  .tabs { display: flex; margin-bottom: 20px; cursor: pointer; }
+  .tab { flex: 1; padding: 10px; text-align: center; background: #eee; border: 1px solid #ccc; }
+  .tab.active { background: #4CAF50; color: white; }
+  .tab-content { border: 1px solid #ccc; padding: 20px; display: none; }
+  .tab-content.active { display: block; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <h1>Patient Dashboard</h1>
+</header>
+
+<div class="dashboard">
+  <div class="tabs">
+    <div class="tab active" data-tab="profile">Profile</div>
+    <div class="tab" data-tab="medical">Medical Details</div>
+    <div class="tab" data-tab="emergency">Emergency Contact</div>
+  </div>
+
+  <div id="profile" class="tab-content active">
+    <h2>Patient Profile</h2>
+    <p><strong>Name:</strong> <span id="pName"></span></p>
+    <p><strong>Age:</strong> <span id="pAge"></span></p>
+    <p><strong>Blood Group:</strong> <span id="pBlood"></span></p>
+    <p><strong>Email:</strong> <span id="pEmail"></span></p>
+    <p><strong>Phone:</strong> <span id="pPhone"></span></p>
+    <p><strong>Address:</strong> <span id="pAddress"></span></p>
+  </div>
+
+  <div id="medical" class="tab-content">
+    <h2>Medical Details</h2>
+    <p id="pMedical"></p>
+  </div>
+
+  <div id="emergency" class="tab-content">
+    <h2>Emergency Contact</h2>
+    <p id="pEmergency"></p>
+  </div>
+</div>
+
+<script>
+const patientData = JSON.parse(localStorage.getItem('patientData') || '{}');
+
+// Populate sections
+document.getElementById('pName').textContent = patientData.name || 'N/A';
+document.getElementById('pAge').textContent = patientData.age || 'N/A';
+document.getElementById('pBlood').textContent = patientData.bloodGroup || 'N/A';
+document.getElementById('pEmail').textContent = patientData.email || 'N/A';
+document.getElementById('pPhone').textContent = patientData.phone || 'N/A';
+document.getElementById('pAddress').textContent = patientData.address || 'N/A';
+document.getElementById('pMedical').textContent = patientData.medicalDetails || 'N/A';
+document.getElementById('pEmergency').textContent = patientData.emergencyContact || 'N/A';
+
+// Tabs toggle
+const tabs = document.querySelectorAll('.tab');
+const contents = document.querySelectorAll('.tab-content');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+
+    contents.forEach(c => c.classList.remove('active'));
+    document.getElementById(tab.dataset.tab).classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>
