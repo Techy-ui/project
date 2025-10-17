@@ -121,8 +121,8 @@ async function loadCard() {
       const frontHeight = frontCanvas.height * (cardWidth / frontCanvas.width);
       const backHeight = backCanvas.height * (cardWidth / backCanvas.width);
 
-      pdf.addImage(frontImgData, "PNG", 30, (pageHeight - frontHeight)/2, cardWidth, frontHeight);
-      pdf.addImage(backImgData, "PNG", 30 + cardWidth + 10, (pageHeight - backHeight)/2, cardWidth, backHeight);
+      pdf.addImage(frontImgData, "PNG", 30,30, cardWidth, frontHeight);
+      pdf.addImage(backImgData, "PNG", 30 + cardWidth + 10,30, cardWidth, backHeight);
 
       pdf.save(`${user.name}_CodeCare_Card.pdf`);
     });
