@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Profile - CodeCare</title>
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="title-row">
+    <img src="../home/logo.png" alt="CodeCare Logo">
+    <h1>CodeCare<sub>Your Health, Just a Scan Away</sub></h1>
+  </div>
+  <nav class="nav-links">
+    <a href="hospitalDashboard.html">Back to Dashboard</a>
+    <span id="btnLogout" style="cursor:pointer;">Logout</span>
+  </nav>
+</header>
+
+<div class="dashboard">
+  <div class="sidebar">
+    <ul>
+      <li><a href="hospitalProfile.html">Profile</a></li>
+      <li><a href="hospitalMedical.html">Medical Details</a></li>
+      <li><a href="hospitalEmergency.html">Emergency Contact</a></li>
+    </ul>
+  </div>
+
+  <div class="content">
+    <h2>Patient Profile</h2>
+    <p><strong>Name:</strong> <span id="pName"></span></p>
+    <p><strong>Age:</strong> <span id="pAge"></span></p>
+    <p><strong>Blood Group:</strong> <span id="pBlood"></span></p>
+    <p><strong>Email:</strong> <span id="pEmail"></span></p>
+    <p><strong>Phone:</strong> <span id="pPhone"></span></p>
+    <p><strong>Address:</strong> <span id="pAddress"></span></p>
+  </div>
+</div>
+
+<script>
+const patientData = JSON.parse(localStorage.getItem('patientData') || '{}');
+
+if (!patientData || Object.keys(patientData).length === 0) {
+    alert("No patient data found. Please scan a QR code first.");
+    window.location.href = "qrScan.html";
+}
+
+// Populate profile
+document.getElementById('pName').textContent = patientData.name || 'N/A';
+document.getElementById('pAge').textContent = patientData.age || 'N/A';
+document.getElementById('pBlood').textContent = patientData.bloodGroup || 'N/A';
+document.getElementById('pEmail').textContent = patientData.email || 'N/A';
+document.getElementById('pPhone').textContent = patientData.phone || 'N/A';
+document.getElementById('pAddress').textContent = patientData.address || 'N/A';
+
+// Logout
+document.getElementById('btnLogout').addEventListener('click', () => {
+    localStorage.removeItem('patientData');
+    window.location.href = "qrScan.html";
+});
+</script>
+
+</body>
+</html>
