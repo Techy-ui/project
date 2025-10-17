@@ -69,7 +69,7 @@ cameraBtn.addEventListener('click', async () => {
     }
 });
 
-// Upload file stops camera first
+// Upload file button stops camera first
 uploadBtn.addEventListener('click', () => {
     if (cameraActive) {
         qrScanner.stop();
@@ -79,7 +79,6 @@ uploadBtn.addEventListener('click', () => {
     fileInput.click();
 });
 
-// Scan QR from uploaded image
 fileInput.addEventListener('change', async () => {
     if (fileInput.files.length > 0) {
         try {
@@ -91,26 +90,32 @@ fileInput.addEventListener('change', async () => {
     }
 });
 
-// Handle QR data and redirect
-function handleQRData(rawData) {
+// Unified QR handler
+async function handleQRData(rawData) {
     try {
-        const parsed = JSON.parse(rawData); // New QR format
-        localStorage.setItem('patientData', JSON.stringify(parsed));
-        window.location.href = "patientDashboard.html";
+        // Try to parse JSON QR code
+        const parsed = JSON.parse(rawData);
+        const identifier = parsed.email || parsed.id;
+        await fetchPatient(identifier);
     } catch (e) {
-        // Old QR format (email only)
-        fetchPatient(rawData);
+        // Fallback: assume QR contains email
+        await fetchPatient(rawData);
     }
 }
 
-// Fetch patient for old QR format
-async function fetchPatient(email) {
+// Fetch fresh patient data from API
+async function fetchPatient(identifier) {
     try {
-        const res = await fetch(`${API_BASE}/user/${encodeURIComponent(email)}`);
+        const res = await fetch(`${API_BASE}/user/${encodeURIComponent(identifier)}`);
         if (!res.ok) throw new Error(`Patient not found: ${res.status}`);
         const data = await res.json();
+
+        // Save latest data in localStorage
         localStorage.setItem('patientData', JSON.stringify(data));
+
+        // Redirect to patient dashboard
         window.location.href = "patientDashboard.html";
+
     } catch (err) {
         console.error(err);
         alert('Failed to fetch patient: ' + err.message);
