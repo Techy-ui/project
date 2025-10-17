@@ -134,6 +134,30 @@ button:hover {
   background-color: #f47a9b;
 }
 
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px; /* space for the eye icon */
+}
+
+.eye-icon {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #666;
+  user-select: none;
+}
+.eye-icon:hover {
+  color: #000;
+}
+
+
 /* === RESPONSIVE === */
 @media screen and (max-width: 768px) {
   .header {
