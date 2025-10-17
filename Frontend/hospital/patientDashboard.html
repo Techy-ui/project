@@ -14,7 +14,7 @@
         <h1>CodeCare<sub>Your Health, Just a Scan Away</sub></h1>
     </div>
     <nav class="nav-links">
-        <a href="dashboard.html">Back to Scanner</a>
+        <a href="hospital.html">Back to login</a>
     </nav>
 </header>
 
@@ -40,13 +40,13 @@
   const patientData = JSON.parse(localStorage.getItem('patientData') || '{}');
   if (!patientData || Object.keys(patientData).length === 0) {
       alert("No patient data found. Please scan a QR code first.");
-      window.location.href = "qrScan.html";
+      window.location.href = "dashboard.html";
   }
 
   // Logout button
   document.getElementById('btnLogout').addEventListener('click', () => {
       localStorage.removeItem('patientData');
-      window.location.href = "qrScan.html"; // Redirect to scanner page
+      window.location.href = "dashboard.html"; 
   });
 </script>
 

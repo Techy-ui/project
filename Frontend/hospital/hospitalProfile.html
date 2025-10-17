@@ -14,17 +14,17 @@
     <h1>CodeCare<sub>Your Health, Just a Scan Away</sub></h1>
   </div>
   <nav class="nav-links">
-    <a href="patientDashboard.html">Back to Dashboard</a>
-    <span id="btnLogout" style="cursor:pointer;">Logout</span>
+    <a href="hospital.html">Back to login</a>
   </nav>
 </header>
 
 <div class="dashboard">
   <div class="sidebar">
     <ul>
-      <li><a href="patientProfile.html">Profile</a></li>
-      <li><a href="patientMedical.html">Medical Details</a></li>
-      <li><a href="patientEmergency.html">Emergency Contact</a></li>
+      <li><a href="hospitalProfile.html">Profile</a></li>
+      <li><a href="hospitalMedical.html">Medical Details</a></li>
+      <li><a href="hospitalEmergency.html">Emergency Contact</a></li>
+      <li id="btnLogout" style="cursor:pointer;">Logout</li>
     </ul>
   </div>
 
@@ -39,7 +39,7 @@
 
   if (!patientData || Object.keys(patientData).length === 0) {
       alert("No patient data found. Please scan a QR code first.");
-      window.location.href = "qrScan.html";
+      window.location.href = "dashboard.html";
   } else {
       content.innerHTML = `
       <h2>${patientData.name || 'Patient'}</h2>
