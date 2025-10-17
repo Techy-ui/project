@@ -19,18 +19,20 @@
 <main class="content">
   <h2>Hospital Dashboard</h2>
 
+  <!-- QR Scanner Section -->
   <div class="qr-scanner-container">
     <h3>Scan Patient QR Code</h3>
     <div class="qr-box">
       <video id="preview" width="300" height="300"></video>
       <div class="qr-options">
-        <button id="cameraBtn">Use Camera</button>
-        <button id="uploadBtn">Upload QR Image</button>
+        <button id="cameraBtn">📷 Use Camera</button>
+        <button id="uploadBtn">📁 Upload QR Image</button>
         <input type="file" id="qrFileInput" accept="image/*" style="display:none;">
       </div>
     </div>
   </div>
 
+  <!-- Patient Info Section -->
   <div id="patientInfo" class="patient-info" style="display:none;">
     <h3>Patient Details</h3>
     <p id="name"></p>
@@ -44,6 +46,7 @@
   </div>
 </main>
 
+<!-- QR Scanner Library -->
 <script type="module" src="https://cdn.jsdelivr.net/npm/qr-scanner@1.4.2/qr-scanner.min.js"></script>
 
 <script type="module">
@@ -55,47 +58,56 @@ const fileInput = document.getElementById('qrFileInput');
 const API_BASE = "https://project-production-65f9.up.railway.app/api";
 
 // Initialize scanner
-let qrScanner = new QrScanner(video, result => {
-    fetchPatient(result.data.trim());
+const qrScanner = new QrScanner(video, result => {
+    qrScanner.stop(); // stop scanning once a result is found
+    const email = result.data.trim();
+    fetchPatient(email);
 });
 
-// Camera button
+// Start camera on button click
 document.getElementById('cameraBtn').addEventListener('click', () => {
     qrScanner.start();
 });
 
-// Upload file button
+// Allow upload of QR image
 document.getElementById('uploadBtn').addEventListener('click', () => {
     fileInput.click();
 });
 
-fileInput.addEventListener('change', () => {
+fileInput.addEventListener('change', async () => {
     if (fileInput.files.length > 0) {
-        QrScanner.scanImage(fileInput.files[0], { returnDetailedScanResult: true })
-            .then(result => fetchPatient(result.data.trim()))
-            .catch(err => alert('Failed to read QR code from image: ' + err));
+        try {
+            const result = await QrScanner.scanImage(fileInput.files[0], { returnDetailedScanResult: true });
+            const email = result.data.trim();
+            fetchPatient(email);
+        } catch (err) {
+            alert('Failed to read QR code from image: ' + err.message);
+        }
     }
 });
 
-// Fetch patient by email from user table
+// Fetch patient info by email (from user table)
 async function fetchPatient(email) {
     try {
         const res = await fetch(`${API_BASE}/user/${encodeURIComponent(email)}`);
-        if (!res.ok) throw new Error(`Patient not found: ${res.status}`);
+        if (!res.ok) throw new Error('Patient not found or server error');
+        
         const data = await res.json();
+        console.log('Fetched patient:', data);
 
         patientInfoDiv.style.display = 'block';
-        document.getElementById('name').textContent = `Name: ${data.name}`;
-        document.getElementById('age').textContent = `Age: ${data.age}`;
-        document.getElementById('bloodGroup').textContent = `Blood Group: ${data.bloodGroup}`;
-        document.getElementById('medicalDetails').textContent = `Medical Details: ${data.medicalDetails}`;
-        document.getElementById('emergencyContact').textContent = `Emergency Contact: ${data.emergencyContact}`;
-        document.getElementById('email').textContent = `Email: ${data.email}`;
-        document.getElementById('phone').textContent = `Phone: ${data.phone}`;
-        document.getElementById('address').textContent = `Address: ${data.address}`;
+        document.getElementById('name').textContent = `Name: ${data.name || 'N/A'}`;
+        document.getElementById('age').textContent = `Age: ${data.age || 'N/A'}`;
+        document.getElementById('bloodGroup').textContent = `Blood Group: ${data.bloodGroup || 'N/A'}`;
+        document.getElementById('medicalDetails').textContent = `Medical Details: ${data.medicalDetails || 'N/A'}`;
+        document.getElementById('emergencyContact').textContent = `Emergency Contact: ${data.emergencyContact || 'N/A'}`;
+        document.getElementById('email').textContent = `Email: ${data.email || email}`;
+        document.getElementById('phone').textContent = `Phone: ${data.phone || 'N/A'}`;
+        document.getElementById('address').textContent = `Address: ${data.address || 'N/A'}`;
     } catch (err) {
         console.error(err);
         alert('Failed to fetch patient: ' + err.message);
+        patientInfoDiv.style.display = 'none';
     }
 }
 </script>
