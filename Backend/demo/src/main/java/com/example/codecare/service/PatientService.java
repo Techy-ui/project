@@ -1,6 +1,6 @@
 package com.example.codecare.service;
 
-import com.example.codecare.entity.Patient;
+import com.example.codecare.model.Patient;
 import com.example.codecare.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
