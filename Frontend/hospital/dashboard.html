@@ -35,6 +35,7 @@
 import QrScanner from "https://cdn.jsdelivr.net/npm/qr-scanner@1.4.2/qr-scanner.min.js";
 
 const video = document.getElementById('preview');
+const patientInfoDiv = document.getElementById('patientInfo');
 const fileInput = document.getElementById('qrFileInput');
 const cameraBtn = document.getElementById('cameraBtn');
 const uploadBtn = document.getElementById('uploadBtn');
@@ -42,51 +43,90 @@ const API_BASE = "https://project-production-65f9.up.railway.app/api";
 
 let cameraActive = false;
 
-const qrScanner = new QrScanner(video, result => handleQRData(result.data.trim()));
+// Initialize scanner
+const qrScanner = new QrScanner(video, result => {
+    if (!result) return;               // ❌ Ignore undefined scans
+    handleQRData(result.trim());       // ✅ Safely trim
+});
 
-// Camera toggle
+// Toggle camera
 cameraBtn.addEventListener('click', async () => {
-  if (!cameraActive) {
-    await qrScanner.start();
-    cameraActive = true;
-    cameraBtn.textContent = "🚫 Stop Camera";
-  } else {
-    qrScanner.stop();
-    cameraActive = false;
-    cameraBtn.textContent = "📷 Use Camera";
-  }
-});
-
-// Upload image
-uploadBtn.addEventListener('click', () => {
-  if (cameraActive) qrScanner.stop();
-  fileInput.click();
-});
-
-fileInput.addEventListener('change', async () => {
-  if (fileInput.files.length > 0) {
-    try {
-      const result = await QrScanner.scanImage(fileInput.files[0]);
-      handleQRData(result.data.trim());
-    } catch (err) {
-      alert('Failed to read QR code: ' + err.message);
+    if (!cameraActive) {
+        await qrScanner.start();
+        cameraActive = true;
+        cameraBtn.textContent = "🚫 Stop Camera";
+    } else {
+        qrScanner.stop();
+        cameraActive = false;
+        cameraBtn.textContent = "📷 Use Camera";
     }
-  }
 });
 
-// Handle QR: fetch latest patient info
-function handleQRData(email) {
-  fetch(`${API_BASE}/user/${encodeURIComponent(email)}`)
-    .then(res => res.ok ? res.json() : Promise.reject('Patient not found'))
-    .then(data => {
-      localStorage.setItem('patientData', JSON.stringify(data));
-      window.location.href = "patientDashboard.html";
-    })
-    .catch(err => {
-      alert(err);
-      console.error(err);
-    });
+// Upload button
+uploadBtn.addEventListener('click', () => {
+    if (cameraActive) {
+        qrScanner.stop();
+        cameraActive = false;
+        cameraBtn.textContent = "📷 Use Camera";
+    }
+    fileInput.click();
+});
+
+// Handle file input
+fileInput.addEventListener('change', async () => {
+    if (fileInput.files.length === 0) return;
+    try {
+        const result = await QrScanner.scanImage(fileInput.files[0], { returnDetailedScanResult: false });
+        if (!result) throw new Error("No QR code found in image");
+        handleQRData(result.trim());
+    } catch (err) {
+        alert('Failed to read QR code: ' + err.message);
+    }
+});
+
+// Unified QR handler
+function handleQRData(rawData) {
+    if (!rawData) return;
+
+    let parsedData;
+    try {
+        parsedData = JSON.parse(rawData); // try JSON (new QR format)
+        displayPatient(parsedData);
+        localStorage.setItem('patientData', JSON.stringify(parsedData)); // store updated data
+    } catch (e) {
+        // fallback: fetch from backend using email or ID from old QR
+        fetchPatient(rawData);
+    }
+}
+
+// Display patient info
+function displayPatient(data) {
+    patientInfoDiv.style.display = 'block';
+    document.getElementById('name').textContent = `Name: ${data.name || 'N/A'}`;
+    document.getElementById('age').textContent = `Age: ${data.age || 'N/A'}`;
+    document.getElementById('bloodGroup').textContent = `Blood Group: ${data.bloodGroup || 'N/A'}`;
+    document.getElementById('medicalDetails').textContent = `Medical Details: ${data.medicalDetails || 'N/A'}`;
+    document.getElementById('emergencyContact').textContent = `Emergency Contact: ${data.emergencyContact || 'N/A'}`;
+    document.getElementById('email').textContent = `Email: ${data.email || 'N/A'}`;
+    document.getElementById('phone').textContent = `Phone: ${data.phone || 'N/A'}`;
+    document.getElementById('address').textContent = `Address: ${data.address || 'N/A'}`;
+}
+
+// Fetch for old QR formats
+async function fetchPatient(email) {
+    try {
+        const res = await fetch(`${API_BASE}/user/${encodeURIComponent(email)}`);
+        if (!res.ok) throw new Error(`Patient not found: ${res.status}`);
+        const data = await res.json();
+        displayPatient(data);
+        localStorage.setItem('patientData', JSON.stringify(data));
+    } catch (err) {
+        console.error(err);
+        alert('Failed to fetch patient: ' + err.message);
+        patientInfoDiv.style.display = 'none';
+    }
 }
 </script>
+
 </body>
 </html>
