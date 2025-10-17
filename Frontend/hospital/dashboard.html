@@ -21,24 +21,22 @@
 
     <div class="dashboard-main">
 
-      <!-- QR Code Scanner -->
-      <div class="qr-scanner">
+      <!-- QR Code Scanner Box -->
+      <div class="qr-scanner-box">
         <h3>Scan Patient QR Code</h3>
         <video id="preview" width="300" height="300"></video>
-      </div>
 
-      <!-- Image Upload Box -->
-      <div class="image-upload">
-        <h3>Upload Patient Image</h3>
-        <label for="imageInput">Choose Image / Camera</label>
-        <input type="file" id="imageInput" accept="image/*" capture="environment">
-        <img id="previewImage" alt="Preview">
+        <div class="qr-options">
+          <button type="button" id="cameraBtn">Camera</button>
+          <button type="button" id="uploadBtn">Upload File</button>
+          <input type="file" id="qrFileInput" accept="image/*" style="display:none;">
+        </div>
       </div>
 
     </div>
 
     <!-- Patient Info -->
-    <div id="patientInfo" style="display:none;">
+    <div id="patientInfo" class="patient-info" style="display:none;">
       <h3>Patient Details</h3>
       <p id="name"></p>
       <p id="age"></p>
@@ -57,7 +55,7 @@
     const video = document.getElementById('preview');
     const patientInfoDiv = document.getElementById('patientInfo');
 
-    // QR Scanner
+    // Initialize QR Scanner
     const qrScanner = new QrScanner(video, result => {
         console.log('QR Code scanned:', result);
         fetchPatient(result);
@@ -65,6 +63,34 @@
 
     qrScanner.start();
 
+    // Buttons and file input
+    const cameraBtn = document.getElementById('cameraBtn');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const fileInput = document.getElementById('qrFileInput');
+
+    cameraBtn.addEventListener('click', () => {
+        qrScanner.start();
+    });
+
+    uploadBtn.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', async (event) => {
+        if (event.target.files.length === 0) return;
+
+        const file = event.target.files[0];
+        try {
+            const result = await QrScanner.scanImage(file, { returnDetailedScanResult: true });
+            console.log('QR Code from file:', result.data);
+            fetchPatient(result.data);
+        } catch (err) {
+            alert('Could not read QR code from file.');
+            console.error(err);
+        }
+    });
+
+    // Fetch patient info from backend
     async function fetchPatient(patientId) {
         try {
             const res = await fetch(`https://project-production-65f9.up.railway.app/api/patient/${patientId}`, {
@@ -76,34 +102,16 @@
 
             const data = await res.json();
 
-            // Display patient info
             patientInfoDiv.style.display = 'block';
             document.getElementById('name').textContent = `Name: ${data.name}`;
             document.getElementById('age').textContent = `Age: ${data.age}`;
             document.getElementById('bloodGroup').textContent = `Blood Group: ${data.bloodGroup}`;
             document.getElementById('medicalDetails').textContent = `Medical Details: ${data.medicalDetails}`;
             document.getElementById('emergencyContact').textContent = `Emergency Contact: ${data.emergencyContact}`;
-
         } catch (err) {
             alert(err.message);
         }
     }
-
-    // Image Upload Preview
-    const imageInput = document.getElementById('imageInput');
-    const previewImage = document.getElementById('previewImage');
-
-    imageInput.addEventListener('change', function() {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          previewImage.src = e.target.result;
-          previewImage.style.display = 'block';
-        }
-        reader.readAsDataURL(file);
-      }
-    });
   </script>
 
 </body>
