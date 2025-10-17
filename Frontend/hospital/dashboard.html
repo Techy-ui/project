@@ -6,97 +6,6 @@
   <title>Hospital Dashboard</title>
   <link rel="icon" type="image/x-icon" href="../home/logo.png">
   <link rel="stylesheet" href="dashboard.css">
-
-  <style>
-    body {
-      font-family: 'Merienda', sans-serif;
-      background: #f0f2f5;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    header.header {
-      width: 100%;
-      background: #4CAF50;
-      color: white;
-      padding: 10px 0;
-      text-align: center;
-    }
-
-    header .title-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    header .title-row img {
-      width: 50px;
-      height: 50px;
-    }
-
-    main {
-      max-width: 800px;
-      width: 90%;
-      margin-top: 30px;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-
-    .qr-scanner {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .qr-scanner video {
-      border-radius: 10px;
-      border: 2px solid #4CAF50;
-      max-width: 100%;
-    }
-
-    #patientInfo p {
-      margin: 5px 0;
-      font-weight: bold;
-    }
-
-    .image-upload {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 20px 0;
-    }
-
-    .image-upload label {
-      background: #4CAF50;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .image-upload img {
-      max-width: 150px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      display: none;
-    }
-  </style>
 </head>
 <body>
 
@@ -110,27 +19,32 @@
   <main>
     <h2>Hospital Dashboard</h2>
 
-    <!-- QR Code Scanner -->
-    <div class="card qr-scanner">
-      <h3>Scan Patient QR Code</h3>
-      <video id="preview" width="300" height="300"></video>
+    <div class="dashboard-main">
+
+      <!-- QR Code Scanner -->
+      <div class="qr-scanner">
+        <h3>Scan Patient QR Code</h3>
+        <video id="preview" width="300" height="300"></video>
+      </div>
+
+      <!-- Image Upload Box -->
+      <div class="image-upload">
+        <h3>Upload Patient Image</h3>
+        <label for="imageInput">Choose Image / Camera</label>
+        <input type="file" id="imageInput" accept="image/*" capture="environment">
+        <img id="previewImage" alt="Preview">
+      </div>
+
     </div>
 
     <!-- Patient Info -->
-    <div class="card" id="patientInfo" style="display:none;">
+    <div id="patientInfo" style="display:none;">
       <h3>Patient Details</h3>
       <p id="name"></p>
       <p id="age"></p>
       <p id="bloodGroup"></p>
       <p id="medicalDetails"></p>
       <p id="emergencyContact"></p>
-    </div>
-
-    <!-- Image Upload -->
-    <div class="card image-upload">
-      <label for="imageUpload">Upload Patient Image</label>
-      <input type="file" id="imageUpload" accept="image/*" capture="environment" style="display: none;">
-      <img id="imagePreview" src="" alt="Patient Image Preview">
     </div>
   </main>
 
@@ -143,10 +57,12 @@
     const video = document.getElementById('preview');
     const patientInfoDiv = document.getElementById('patientInfo');
 
+    // QR Scanner
     const qrScanner = new QrScanner(video, result => {
         console.log('QR Code scanned:', result);
         fetchPatient(result);
     });
+
     qrScanner.start();
 
     async function fetchPatient(patientId) {
@@ -167,25 +83,25 @@
             document.getElementById('bloodGroup').textContent = `Blood Group: ${data.bloodGroup}`;
             document.getElementById('medicalDetails').textContent = `Medical Details: ${data.medicalDetails}`;
             document.getElementById('emergencyContact').textContent = `Emergency Contact: ${data.emergencyContact}`;
+
         } catch (err) {
             alert(err.message);
         }
     }
 
-    // Image upload preview
-    const imageInput = document.getElementById('imageUpload');
-    const imagePreview = document.getElementById('imagePreview');
+    // Image Upload Preview
+    const imageInput = document.getElementById('imageInput');
+    const previewImage = document.getElementById('previewImage');
 
-    document.querySelector('.image-upload label').addEventListener('click', () => imageInput.click());
-
-    imageInput.addEventListener('change', function () {
-      if (this.files && this.files[0]) {
+    imageInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          imagePreview.src = e.target.result;
-          imagePreview.style.display = 'block';
-        };
-        reader.readAsDataURL(this.files[0]);
+          previewImage.src = e.target.result;
+          previewImage.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
       }
     });
   </script>
