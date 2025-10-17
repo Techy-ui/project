@@ -1,16 +1,31 @@
-package com.example.codecare.repository;
+package com.example.codecare.service;
 
 import com.example.codecare.model.Patient;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.example.codecare.repository.PatientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Repository
-public interface PatientRepository extends JpaRepository<Patient, Long> {
-    Patient findByQrCode(String qrCode);
+@Service
+public class PatientService {
 
-    // Add these to match your controller
-    Optional<Patient> findByEmail(String email);
-    Optional<Patient> findByPatientId(String patientId);
+    @Autowired
+    private PatientRepository patientRepository;
+
+    // Get patient by QR code
+    public Patient getPatientByQrCode(String qrCode) {
+        // Returns the patient if found, otherwise null
+        return patientRepository.findByQrCode(qrCode).orElse(null);
+    }
+
+    // Save a patient
+    public Patient savePatient(Patient patient) {
+        return patientRepository.save(patient);
+    }
+
+    // Get all patients
+    public Iterable<Patient> getAllPatients() {
+        return patientRepository.findAll();
+    }
 }
