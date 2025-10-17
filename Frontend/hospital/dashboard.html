@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hospital QR Scanner</title>
-  <link rel="icon" type="image/x-icon" href="../home/logo.png">
-  <link rel="stylesheet" href="dashboard.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scan Patient QR - CodeCare</title>
+<link rel="stylesheet" href="dashboard.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/qr-scanner@1.4.2/qr-scanner.min.js"></script>
 </head>
 <body>
 
@@ -16,29 +16,20 @@
   </div>
   <nav class="nav-links">
     <a href="../home/home.html">Home</a>
-    <a href="hospital.html">Back to login</a>
   </nav>
 </header>
 
 <main class="content">
-
-  <!-- QR Scanner Section -->
   <div class="qr-scanner-container">
     <h3>Scan Patient QR Code</h3>
-    <div class="qr-box">
-      <video id="preview" width="300" height="300"></video>
-      <div class="qr-options">
-        <button id="cameraBtn">📷 Use Camera</button>
-        <button id="uploadBtn">📁 Upload QR Image</button>
-        <input type="file" id="qrFileInput" accept="image/*" style="display:none;">
-      </div>
+    <video id="preview" width="300" height="300"></video>
+    <div class="qr-options">
+      <button id="cameraBtn">📷 Use Camera</button>
+      <button id="uploadBtn">📁 Upload QR Image</button>
+      <input type="file" id="qrFileInput" accept="image/*" style="display:none;">
     </div>
   </div>
-
 </main>
-
-<!-- QR Scanner Library -->
-<script type="module" src="https://cdn.jsdelivr.net/npm/qr-scanner@1.4.2/qr-scanner.min.js"></script>
 
 <script type="module">
 import QrScanner from "https://cdn.jsdelivr.net/npm/qr-scanner@1.4.2/qr-scanner.min.js";
@@ -51,77 +42,51 @@ const API_BASE = "https://project-production-65f9.up.railway.app/api";
 
 let cameraActive = false;
 
-// Initialize scanner
-const qrScanner = new QrScanner(video, result => {
-    handleQRData(result.data.trim());
-});
+const qrScanner = new QrScanner(video, result => handleQRData(result.data.trim()));
 
-// Toggle camera
+// Camera toggle
 cameraBtn.addEventListener('click', async () => {
-    if (!cameraActive) {
-        await qrScanner.start();
-        cameraActive = true;
-        cameraBtn.textContent = "🚫 Stop Camera";
-    } else {
-        qrScanner.stop();
-        cameraActive = false;
-        cameraBtn.textContent = "📷 Use Camera";
-    }
+  if (!cameraActive) {
+    await qrScanner.start();
+    cameraActive = true;
+    cameraBtn.textContent = "🚫 Stop Camera";
+  } else {
+    qrScanner.stop();
+    cameraActive = false;
+    cameraBtn.textContent = "📷 Use Camera";
+  }
 });
 
-// Upload file button stops camera first
+// Upload image
 uploadBtn.addEventListener('click', () => {
-    if (cameraActive) {
-        qrScanner.stop();
-        cameraActive = false;
-        cameraBtn.textContent = "📷 Use Camera";
-    }
-    fileInput.click();
+  if (cameraActive) qrScanner.stop();
+  fileInput.click();
 });
 
 fileInput.addEventListener('change', async () => {
-    if (fileInput.files.length > 0) {
-        try {
-            const result = await QrScanner.scanImage(fileInput.files[0], { returnDetailedScanResult: true });
-            handleQRData(result.data.trim());
-        } catch (err) {
-            alert('Failed to read QR code from image: ' + err.message);
-        }
+  if (fileInput.files.length > 0) {
+    try {
+      const result = await QrScanner.scanImage(fileInput.files[0]);
+      handleQRData(result.data.trim());
+    } catch (err) {
+      alert('Failed to read QR code: ' + err.message);
     }
+  }
 });
 
-// Unified QR handler
-async function handleQRData(rawData) {
-    try {
-        // Try to parse JSON QR code
-        const parsed = JSON.parse(rawData);
-        const identifier = parsed.email || parsed.id;
-        await fetchPatient(identifier);
-    } catch (e) {
-        // Fallback: assume QR contains email
-        await fetchPatient(rawData);
-    }
-}
-
-// Fetch fresh patient data from API
-async function fetchPatient(identifier) {
-    try {
-        const res = await fetch(`${API_BASE}/user/${encodeURIComponent(identifier)}`);
-        if (!res.ok) throw new Error(`Patient not found: ${res.status}`);
-        const data = await res.json();
-
-        // Save latest data in localStorage
-        localStorage.setItem('patientData', JSON.stringify(data));
-
-        // Redirect to patient dashboard
-        window.location.href = "patientDashboard.html";
-
-    } catch (err) {
-        console.error(err);
-        alert('Failed to fetch patient: ' + err.message);
-    }
+// Handle QR: fetch latest patient info
+function handleQRData(email) {
+  fetch(`${API_BASE}/user/${encodeURIComponent(email)}`)
+    .then(res => res.ok ? res.json() : Promise.reject('Patient not found'))
+    .then(data => {
+      localStorage.setItem('patientData', JSON.stringify(data));
+      window.location.href = "patientDashboard.html";
+    })
+    .catch(err => {
+      alert(err);
+      console.error(err);
+    });
 }
 </script>
-
 </body>
 </html>

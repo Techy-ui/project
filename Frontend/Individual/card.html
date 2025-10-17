@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Card Generation - CodeCare</title>
-  <link rel="stylesheet" href="dashboard.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card Generation - CodeCare</title>
+<link rel="stylesheet" href="dashboard.css">
 
-  <!-- jsPDF + html2canvas -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- jsPDF + html2canvas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -47,22 +47,8 @@ async function loadCard() {
     if (!res.ok) throw new Error("Failed to fetch profile");
     const user = await res.json();
 
-    // 🔹 Encode patient data as JSON
-    const qrPayload = {
-      name: user.name,
-      age: user.age,
-      bloodGroup: user.bloodGroup,
-      email: user.email,
-      phone: user.phone,
-      emergencyContact: user.emergencyContact,
-      address: user.address,
-      medicalDetails: user.medicalDetails
-    };
-
-    // Convert to a compact string
-    const qrData = encodeURIComponent(JSON.stringify(qrPayload));
-
-    // Generate QR code using online API
+    // 🔹 Only encode email in QR (stays the same)
+    const qrData = encodeURIComponent(user.email);
     const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrData}`;
 
     content.innerHTML = `
@@ -98,7 +84,7 @@ async function loadCard() {
             </div>
             <div class="qr">
               <img src="${qrCodeURL}" alt="QR Code">
-              <p style="text-align:center; font-size:14px; margin-top:5px; color:#555; margin-left:15px;">(Contains full patient data)</p>
+              <p style="text-align:center; font-size:14px; margin-top:5px; color:#555; margin-left:15px;">(Scan to fetch latest patient info)</p>
             </div>
           </div>
         </div>
@@ -113,10 +99,6 @@ async function loadCard() {
       const frontCard = document.getElementById("frontCard");
       const backCard = document.getElementById("backCard");
 
-      // Add borders temporarily for clarity
-      frontCard.style.border = "2px solid #4CAF50";
-      backCard.style.border = "2px solid #4CAF50";
-
       const frontCanvas = await html2canvas(frontCard, { useCORS: true, scale: 2 });
       const backCanvas = await html2canvas(backCard, { useCORS: true, scale: 2 });
 
@@ -125,19 +107,14 @@ async function loadCard() {
 
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
-
       const cardWidth = (pageWidth - 60) / 2;
       const frontHeight = frontCanvas.height * (cardWidth / frontCanvas.width);
       const backHeight = backCanvas.height * (cardWidth / backCanvas.width);
-      const cardHeight = Math.max(frontHeight, backHeight);
 
-      pdf.addImage(frontImgData, "PNG", 30, (pageHeight - cardHeight)/2, cardWidth, frontHeight);
-      pdf.addImage(backImgData, "PNG", 30 + cardWidth + 10, (pageHeight - cardHeight)/2, cardWidth, backHeight);
+      pdf.addImage(frontImgData, "PNG", 30, (pageHeight - frontHeight)/2, cardWidth, frontHeight);
+      pdf.addImage(backImgData, "PNG", 30 + cardWidth + 10, (pageHeight - backHeight)/2, cardWidth, backHeight);
 
       pdf.save(`${user.name}_CodeCare_Card.pdf`);
-
-      frontCard.style.border = "";
-      backCard.style.border = "";
     });
 
   } catch (err) {
