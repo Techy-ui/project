@@ -4,8 +4,13 @@ import com.example.codecare.entity.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
-    // Add this method to fix the error
     Patient findByQrCode(String qrCode);
+
+    // Add these to match your controller
+    Optional<Patient> findByEmail(String email);
+    Optional<Patient> findByPatientId(String patientId);
 }
